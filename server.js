@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-const CARAPIS_API_KEY = 'car_OBvs4gF1Z9_H0r16w6EsQaGzUzbU-FCgfIA4hdTFlv0';
+const CARAPIS_API_KEY = 'car_MmD8D4AHfaMV5IwAu7cHghc7rUos0P0Np23h6ALkL08';
 const BASE_URL = 'https://api.carapis.com/apix/catalog_private/vehicles';
 
 // Health check endpoint
