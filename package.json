@@ -1,7 +1,7 @@
 {
   "name": "carapis-backend",
   "version": "1.0.0",
-  "description": "CarAPIS API Proxy",
+  "description": "CarAPIS API Proxy with Axios",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -9,9 +9,6 @@
   "dependencies": {
     "express": "^4.18.2",
     "cors": "^2.8.5",
-    "node-fetch": "^2.7.0"
-  },
-  "engines": {
-    "node": ">=16.0.0"
+    "axios": "^1.6.2"
   }
 }
