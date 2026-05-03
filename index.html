@@ -18,7 +18,6 @@
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #14161c; border-radius: 10px; }
     ::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
     
     .car-card {
       background: #111317;
@@ -44,10 +43,7 @@
       box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
     }
     
-    .btn-outline {
-      border: 1px solid #3b82f6;
-      transition: all 0.3s ease;
-    }
+    .btn-outline { border: 1px solid #3b82f6; transition: all 0.3s ease; }
     .btn-outline:hover { background: rgba(59, 130, 246, 0.1); border-color: #60a5fa; }
     
     .hero-glass {
@@ -100,8 +96,9 @@
     <div class="container mx-auto px-6 py-4">
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div class="flex items-center gap-3">
-          <img src="logo.png" alt="AAB Premier" class="w-12 h-12 object-contain rounded-lg" 
-               onerror="this.src='https://placehold.co/48x48/1e293b/3b82f6?text=AAB'">
+          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+            <i class="fas fa-car-side text-white text-xl"></i>
+          </div>
           <div class="leading-tight">
             <h1 class="text-2xl font-luxury font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">AAB Premier</h1>
             <p class="text-[10px] text-blue-400/70 -mt-1 tracking-wide">IMPORT PREMIUM I AUTOMJETEVE</p>
@@ -167,12 +164,11 @@
       <h3 class="text-lg font-semibold mb-5 flex items-center gap-2 font-luxury">
         <i class="fas fa-sliders-h text-blue-400"></i> Kërkimi i Avancuar i Automjeteve
       </h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <!-- Brand Selection -->
         <div>
           <label class="block text-xs text-blue-400 mb-1 font-semibold">Marka</label>
-          <select id="brandFilter" class="w-full text-sm">
+          <select id="makeFilter" class="w-full text-sm">
             <option value="">Të gjitha Markat</option>
             <option value="Hyundai">Hyundai (Kore)</option>
             <option value="Kia">Kia (Kore)</option>
@@ -182,71 +178,22 @@
             <option value="Mercedes-Benz">Mercedes-Benz</option>
             <option value="Volkswagen">Volkswagen</option>
             <option value="Toyota">Toyota</option>
-            <option value="Honda">Honda</option>
-            <option value="Nissan">Nissan</option>
           </select>
         </div>
         
-        <!-- Model Selection (Dynamic based on brand) -->
         <div>
           <label class="block text-xs text-blue-400 mb-1 font-semibold">Modeli</label>
-          <select id="modelFilter" class="w-full text-sm">
-            <option value="">Të gjitha Modelet</option>
-          </select>
+          <input type="text" id="modelFilter" placeholder="Modeli (Tucson, A4...)" class="w-full text-sm">
         </div>
         
-        <!-- Motor / Engine Selection -->
         <div>
-          <label class="block text-xs text-blue-400 mb-1 font-semibold">Motori (cc)</label>
-          <select id="engineFilter" class="w-full text-sm">
-            <option value="">Të gjithë Motorët</option>
-            <option value="1000">1.0L (1000cc)</option>
-            <option value="1200">1.2L (1200cc)</option>
-            <option value="1400">1.4L (1400cc)</option>
-            <option value="1600">1.6L (1600cc)</option>
-            <option value="1800">1.8L (1800cc)</option>
-            <option value="2000">2.0L (2000cc)</option>
-            <option value="2200">2.2L (2200cc)</option>
-            <option value="2500">2.5L (2500cc)</option>
-            <option value="3000">3.0L (3000cc)</option>
-            <option value="3500">3.5L (3500cc)</option>
-            <option value="4000">4.0L+ (4000cc+)</option>
-          </select>
-        </div>
-        
-        <!-- Fuel Type -->
-        <div>
-          <label class="block text-xs text-blue-400 mb-1 font-semibold">Karburanti</label>
-          <select id="fuelType" class="w-full text-sm">
-            <option value="">Të gjitha</option>
-            <option value="Gasoline">Benzinë</option>
-            <option value="Diesel">Diesel</option>
-            <option value="Electric">Elektrike</option>
-            <option value="Hybrid">Hibrid</option>
-          </select>
-        </div>
-        
-        <!-- Transmission -->
-        <div>
-          <label class="block text-xs text-blue-400 mb-1 font-semibold">Transmisioni</label>
-          <select id="transmission" class="w-full text-sm">
-            <option value="">Të gjitha</option>
-            <option value="Automatic">Automatik</option>
-            <option value="Manual">Manual</option>
-            <option value="CVT">CVT</option>
-          </select>
-        </div>
-        
-        <!-- Price Range -->
-        <div>
-          <label class="block text-xs text-blue-400 mb-1 font-semibold">Çmimi (USD)</label>
+          <label class="block text-xs text-blue-400 mb-1 font-semibold">Çmimi (KRW / 10,000)</label>
           <div class="flex gap-2">
             <input type="number" id="minPrice" placeholder="Min" class="w-1/2 text-sm">
             <input type="number" id="maxPrice" placeholder="Max" class="w-1/2 text-sm">
           </div>
         </div>
         
-        <!-- Year Range -->
         <div>
           <label class="block text-xs text-blue-400 mb-1 font-semibold">Viti</label>
           <div class="flex gap-2">
@@ -255,27 +202,12 @@
           </div>
         </div>
         
-        <!-- Mileage Range -->
         <div>
           <label class="block text-xs text-blue-400 mb-1 font-semibold">Kilometrazhi</label>
           <div class="flex gap-2">
             <input type="number" id="minMileage" placeholder="Min km" class="w-1/2 text-sm">
             <input type="number" id="maxMileage" placeholder="Max km" class="w-1/2 text-sm">
           </div>
-        </div>
-        
-        <!-- Body Type -->
-        <div>
-          <label class="block text-xs text-blue-400 mb-1 font-semibold">Lloji i Karrocerisë</label>
-          <select id="bodyType" class="w-full text-sm">
-            <option value="">Të gjitha</option>
-            <option value="SUV">SUV</option>
-            <option value="Sedan">Sedan</option>
-            <option value="Hatchback">Hatchback</option>
-            <option value="Coupe">Coupe</option>
-            <option value="Convertible">Cabrio</option>
-            <option value="Wagon">Wagon</option>
-          </select>
         </div>
       </div>
       
@@ -364,7 +296,9 @@
       <div class="grid md:grid-cols-3 gap-8 mb-8">
         <div>
           <div class="flex items-center gap-2 mb-4">
-            <img src="logo.png" alt="AAB" class="w-8 h-8" onerror="this.src='https://placehold.co/32x32/1e293b/3b82f6?text=AAB'">
+            <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
+              <i class="fas fa-car-side text-white text-sm"></i>
+            </div>
             <span class="font-luxury text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">AAB Premier</span>
           </div>
           <p class="text-gray-400 text-sm">Importues specializuar i automjeteve luksoze. Cilësi, besueshmëri dhe ekselencë që nga viti 2013.</p>
@@ -405,184 +339,130 @@
 
   <script>
     // ============================================
-    // CARAPIS API INTEGRATION - ME FILTRAT E SAKTË
-    // API Key: car_OBvs4gF1Z9_H0r16w6EsQaGzUzbU-FCgfIA4hdTFlv0
+    // CARAPIS API - V1 ENDPOINT (Simpler)
+    // Base URL: https://api.carapis.com/v1/encar/vehicles
+    // Parameters: make, model, year, price_min, price_max, limit
     // ============================================
     
-    // ⚠️ NDRYSHO KËTË URL ME BACKEND-IN TUAJ NË RENDER ⚠️
-    const API_BASE_URL = 'https://autosalloniaab.onrender.com/api/vehicles';
-    
-    const CARAPIS_API_KEY = 'car_MmD8D4AHfaMV5IwAu7cHghc7rUos0P0Np23h6ALkL08';
+    const API_BASE_URL = 'https://api.carapis.com/v1/encar/vehicles';
+    const API_KEY = 'car_OBvs4gF1Z9_H0r16w6EsQaGzUzbU-FCgfIA4hdTFlv0';
     
     let currentPage = 1;
     let allVehicles = [];
     let totalVehicles = 0;
     let isLoading = false;
     const itemsPerPage = 6;
+    let currentLimit = 24; // API limit (max 100)
     
-    // Model data per marka (per dropdown dinamik)
-    const modelsByBrand = {
-      'Hyundai': ['Tucson', 'Santa Fe', 'Elantra', 'Sonata', 'Kona', 'i30', 'Palisade', 'Accent', 'Veloster'],
-      'Kia': ['Sportage', 'Sorento', 'Ceed', 'Stinger', 'Picanto', 'Rio', 'Telluride', 'Soul', 'Optima'],
-      'Genesis': ['G70', 'G80', 'G90', 'GV70', 'GV80'],
-      'Audi': ['A3', 'A4', 'A6', 'A7', 'A8', 'Q3', 'Q5', 'Q7', 'Q8', 'e-tron'],
-      'BMW': ['3 Series', '5 Series', '7 Series', 'X3', 'X5', 'X7', 'M3', 'M5', 'i4', 'iX'],
-      'Mercedes-Benz': ['C-Class', 'E-Class', 'S-Class', 'GLC', 'GLE', 'GLS', 'A-Class', 'CLA', 'EQS'],
-      'Volkswagen': ['Golf', 'Passat', 'Tiguan', 'Arteon', 'ID.4', 'ID.3', 'Polo', 'Touareg'],
-      'Toyota': ['Camry', 'Corolla', 'RAV4', 'Highlander', 'Prius', 'Yaris', 'Land Cruiser', 'Supra'],
-      'Honda': ['Civic', 'Accord', 'CR-V', 'HR-V', 'Pilot', 'Odyssey', 'Insight'],
-      'Nissan': ['Altima', 'Sentra', 'Rogue', 'Murano', 'Leaf', 'Maxima', '370Z', 'GT-R']
-    };
-    
-    // Përditëso model dropdown bazuar në markën e zgjedhur
-    function updateModelDropdown() {
-      const selectedBrand = document.getElementById('brandFilter').value;
-      const modelSelect = document.getElementById('modelFilter');
-      
-      modelSelect.innerHTML = '<option value="">Të gjitha Modelet</option>';
-      
-      if (selectedBrand && modelsByBrand[selectedBrand]) {
-        modelsByBrand[selectedBrand].forEach(model => {
-          const option = document.createElement('option');
-          option.value = model;
-          option.textContent = model;
-          modelSelect.appendChild(option);
-        });
-      }
-    }
-    
-    // Ndërto URL-në e API-së me parametrat e sakta të CarAPIS
+    // Helper: Build URL with correct parameters (make, model, price_min, price_max, year, limit)
     function buildApiUrl() {
       const params = new URLSearchParams();
-      params.append('page', currentPage);
-      params.append('page_size', 24);
-      params.append('available_only', 'false');
       
-      const brand = document.getElementById('brandFilter')?.value;
+      // Use limit instead of page_size (max 100)
+      params.append('limit', currentLimit);
+      
+      const make = document.getElementById('makeFilter')?.value;
       const model = document.getElementById('modelFilter')?.value;
-      const fuelType = document.getElementById('fuelType')?.value;
-      const transmission = document.getElementById('transmission')?.value;
       const minPrice = document.getElementById('minPrice')?.value;
       const maxPrice = document.getElementById('maxPrice')?.value;
       const minYear = document.getElementById('minYear')?.value;
       const maxYear = document.getElementById('maxYear')?.value;
-      const minMileage = document.getElementById('minMileage')?.value;
-      const maxMileage = document.getElementById('maxMileage')?.value;
-      const engineValue = document.getElementById('engineFilter')?.value;
-      const bodyType = document.getElementById('bodyType')?.value;
       
-      if (brand && brand !== '') params.append('brand', brand);
+      if (make && make !== '') params.append('make', make);
       if (model && model !== '') params.append('model', model);
-      if (fuelType && fuelType !== '') params.append('fuel_type', fuelType);
-      if (transmission && transmission !== '') params.append('transmission', transmission);
-      if (minPrice && minPrice !== '') params.append('min_price', minPrice);
-      if (maxPrice && maxPrice !== '') params.append('max_price', maxPrice);
-      if (minYear && minYear !== '') params.append('min_year', minYear);
-      if (maxYear && maxYear !== '') params.append('max_year', maxYear);
-      if (minMileage && minMileage !== '') params.append('min_mileage', minMileage);
-      if (maxMileage && maxMileage !== '') params.append('max_mileage', maxMileage);
-      if (bodyType && bodyType !== '') params.append('body_type', bodyType);
-      
-      // Engine filter
-      if (engineValue && engineValue !== '') {
-        const engineCC = parseInt(engineValue);
-        if (engineValue === '4000') {
-          params.append('min_engine_cc', '4000');
-        } else {
-          params.append('min_engine_cc', engineCC);
-          params.append('max_engine_cc', engineCC + 500);
-        }
-      }
-      
-      params.append('ordering', '-id');
+      if (minPrice && minPrice !== '') params.append('price_min', minPrice);
+      if (maxPrice && maxPrice !== '') params.append('price_max', maxPrice);
+      if (minYear && minYear !== '') params.append('year', minYear);
+      if (maxYear && maxYear !== '') params.append('year', maxYear);
       
       return `${API_BASE_URL}?${params.toString()}`;
     }
     
-    // Merr automjetet nga CarAPIS
+    // Fetch vehicles from CarAPIS v1 endpoint
     async function fetchVehicles() {
       if (isLoading) return;
       isLoading = true;
       
-      loadingIndicator.classList.remove('hidden');
-      carsGrid.innerHTML = '';
-      resultStats.innerHTML = 'Duke ngarkuar të dhëna live nga CarAPIS...';
+      document.getElementById('loadingIndicator').classList.remove('hidden');
+      document.getElementById('carsGrid').innerHTML = '';
+      document.getElementById('resultStats').innerHTML = 'Duke ngarkuar të dhëna live nga CarAPIS...';
       
       try {
         const url = buildApiUrl();
-        console.log('Duke marrë nga:', url);
+        console.log('Fetching from:', url);
         
-        const headers = { 'Content-Type': 'application/json' };
-        
-        if (API_BASE_URL.includes('carapis.com')) {
-          headers['Authorization'] = `Bearer ${CARAPIS_API_KEY}`;
-        }
-        
-        const response = await fetch(url, { headers });
+        const response = await fetch(url, {
+          headers: {
+            'Authorization': `Bearer ${API_KEY}`,
+            'Content-Type': 'application/json'
+          }
+        });
         
         if (!response.ok) {
-          throw new Error(`Gabim API ${response.status}`);
+          throw new Error(`API Error ${response.status}: ${response.statusText}`);
         }
         
         const data = await response.json();
-        console.log('Përgjigjja e API:', data);
+        console.log('API Response:', data);
         
-        allVehicles = data.results || data.data || [];
-        totalVehicles = data.count || allVehicles.length;
-        
+        // Handle the new response structure: { data: [], pagination: { total, limit, pages } }
+        allVehicles = data.data || [];
+        totalVehicles = data.pagination?.total || allVehicles.length;
         const totalPages = Math.ceil(totalVehicles / itemsPerPage);
+        
+        document.getElementById('resultStats').innerHTML = `${totalVehicles.toLocaleString()} automjete premium • Faqe ${currentPage} nga ${totalPages || 1}`;
+        
+        // Apply client-side pagination
         const start = (currentPage - 1) * itemsPerPage;
         const pageVehicles = allVehicles.slice(start, start + itemsPerPage);
         
-        resultStats.innerHTML = `${totalVehicles.toLocaleString()} automjete premium • Faqe ${currentPage} nga ${totalPages}`;
-        
         if (pageVehicles.length === 0) {
-          carsGrid.innerHTML = `
+          document.getElementById('carsGrid').innerHTML = `
             <div class="col-span-full text-center py-16">
               <i class="fas fa-car-side text-5xl text-gray-600 mb-4"></i>
               <p class="text-gray-400">Nuk u gjet asnjë automjet që përputhet me kriteret tuaja</p>
             </div>
           `;
-          paginationWrapper.innerHTML = '';
+          document.getElementById('paginationWrapper').innerHTML = '';
         } else {
           renderVehicles(pageVehicles);
           renderPagination(totalPages);
         }
         
       } catch (error) {
-        console.error('Gabim në marrjen e të dhënave:', error);
-        resultStats.innerHTML = '⚠️ Gabim në lidhje me CarAPIS API. Sigurohuni që backend-i është aktiv.';
-        carsGrid.innerHTML = `
+        console.error('Fetch Error:', error);
+        document.getElementById('resultStats').innerHTML = '⚠️ Gabim në lidhje me CarAPIS API. Provoni përsëri.';
+        document.getElementById('carsGrid').innerHTML = `
           <div class="col-span-full text-center py-16">
             <i class="fas fa-exclamation-triangle text-5xl text-blue-400 mb-4"></i>
             <p class="text-gray-400">Nuk mund të lidhemi me CarAPIS API</p>
-            <p class="text-gray-500 text-sm mt-2">Fillimisht vendosni backend-in në Render.com</p>
-            <p class="text-gray-500 text-xs mt-2">URL aktuale: ${API_BASE_URL}</p>
+            <p class="text-gray-500 text-sm mt-2">Gabim: ${error.message}</p>
+            <p class="text-gray-500 text-xs mt-2">API Key: ${API_KEY.substring(0, 15)}...</p>
           </div>
         `;
       } finally {
         isLoading = false;
-        loadingIndicator.classList.add('hidden');
+        document.getElementById('loadingIndicator').classList.add('hidden');
       }
     }
     
-    // Shfaq kartat e automjeteve
+    // Render vehicle cards
     function renderVehicles(vehicles) {
+      const carsGrid = document.getElementById('carsGrid');
       carsGrid.innerHTML = vehicles.map(vehicle => {
-        const isKorean = ['Hyundai', 'Kia', 'Genesis'].includes(vehicle.brand);
-        const priceUSD = vehicle.price || 0;
+        const isKorean = ['Hyundai', 'Kia', 'Genesis'].includes(vehicle.make);
+        // Price is in KRW (Korean Won) - convert to USD (approx 1 USD = 1350 KRW)
+        const priceKRW = vehicle.price || 0;
+        const priceUSD = Math.round(priceKRW / 1350);
         const priceEUR = Math.round(priceUSD * 0.92);
-        const kmValue = vehicle.mileage || vehicle.km_age || 0;
+        const kmValue = vehicle.mileage || 0;
         const yearValue = vehicle.year || 'N/A';
-        const fuelType = vehicle.fuel_type || vehicle.engine_type || 'Benzinë';
-        const transmission = vehicle.transmission || 'Automatik';
-        const engineCC = vehicle.engine_cc || vehicle.displacement || 'N/A';
-        const imgUrl = vehicle.images?.[0] || 'https://placehold.co/800x500/1a1a2e/3b82f6?text=' + encodeURIComponent(vehicle.brand || 'Car');
+        const imgUrl = vehicle.images?.[0] || `https://placehold.co/800x500/1a1a2e/3b82f6?text=${vehicle.make}+${vehicle.model}`;
         
         return `
-          <div class="car-card rounded-2xl overflow-hidden group" onclick="showVehicleDetails(${JSON.stringify(vehicle).replace(/"/g, '&quot;')})">
+          <div class="car-card rounded-2xl overflow-hidden group" onclick='showVehicleDetails(${JSON.stringify(vehicle).replace(/'/g, "\\'")})'>
             <div class="relative h-56 overflow-hidden">
-              <img src="${imgUrl}" alt="${vehicle.brand} ${vehicle.model}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+              <img src="${imgUrl}" alt="${vehicle.make} ${vehicle.model}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
               ${isKorean ? '<div class="absolute top-3 left-3 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full"><i class="fas fa-gem"></i> IMPORT KORE</div>' : ''}
               <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition flex items-center justify-center opacity-0 group-hover:opacity-100">
                 <i class="fas fa-expand text-white text-3xl bg-black/50 p-3 rounded-full"></i>
@@ -591,11 +471,10 @@
             <div class="p-5">
               <div class="flex justify-between items-start">
                 <div>
-                  <h3 class="text-xl font-bold">${vehicle.brand || 'Unknown'} ${vehicle.model || ''}</h3>
+                  <h3 class="text-xl font-bold">${vehicle.make || 'Unknown'} ${vehicle.model || ''}</h3>
                   <div class="flex gap-2 text-gray-400 text-xs mt-1">
                     <span><i class="far fa-calendar-alt text-blue-400"></i> ${yearValue}</span>
                     <span><i class="fas fa-tachometer-alt text-blue-400"></i> ${kmValue.toLocaleString()} km</span>
-                    <span><i class="fas fa-microchip text-blue-400"></i> ${engineCC}cc</span>
                   </div>
                 </div>
                 <div class="text-right">
@@ -604,9 +483,8 @@
                 </div>
               </div>
               <div class="flex gap-2 mt-4">
-                <span class="bg-gray-800/60 px-3 py-1 rounded-full text-xs"><i class="fas fa-gas-pump text-blue-400"></i> ${fuelType}</span>
-                <span class="bg-gray-800/60 px-3 py-1 rounded-full text-xs"><i class="fas fa-cogs text-blue-400"></i> ${transmission}</span>
-                ${vehicle.body_type ? `<span class="bg-gray-800/60 px-3 py-1 rounded-full text-xs"><i class="fas fa-car text-blue-400"></i> ${vehicle.body_type}</span>` : ''}
+                <span class="bg-gray-800/60 px-3 py-1 rounded-full text-xs"><i class="fas fa-map-marker-alt text-blue-400"></i> ${vehicle.location || 'Korea'}</span>
+                <span class="bg-gray-800/60 px-3 py-1 rounded-full text-xs"><i class="fas fa-store text-blue-400"></i> ${vehicle.seller || 'Dealer'}</span>
               </div>
               <button class="w-full mt-4 btn-primary text-white font-semibold py-2 rounded-xl text-sm transition">
                 <i class="fas fa-eye mr-2"></i> Shiko Detajet
@@ -617,17 +495,17 @@
       }).join('');
     }
     
-    // Shfaq detajet në modal
+    // Show vehicle details in modal
     window.showVehicleDetails = function(vehicle) {
       const modal = document.getElementById('vehicleModal');
       const modalContent = document.getElementById('modalContent');
       
-      const priceUSD = vehicle.price || 0;
+      const priceKRW = vehicle.price || 0;
+      const priceUSD = Math.round(priceKRW / 1350);
       const priceEUR = Math.round(priceUSD * 0.92);
-      const kmValue = vehicle.mileage || vehicle.km_age || 0;
-      const engineCC = vehicle.engine_cc || vehicle.displacement || 'N/A';
-      const imgUrl = vehicle.images?.[0] || 'https://placehold.co/800x500/1a1a2e/3b82f6?text=' + encodeURIComponent(vehicle.brand || 'Car');
-      const isKorean = ['Hyundai', 'Kia', 'Genesis'].includes(vehicle.brand);
+      const kmValue = vehicle.mileage || 0;
+      const imgUrl = vehicle.images?.[0] || `https://placehold.co/800x500/1a1a2e/3b82f6?text=${vehicle.make}+${vehicle.model}`;
+      const isKorean = ['Hyundai', 'Kia', 'Genesis'].includes(vehicle.make);
       
       modalContent.innerHTML = `
         <div class="space-y-5">
@@ -635,8 +513,8 @@
           
           <div class="flex justify-between items-start">
             <div>
-              <h2 class="text-2xl font-luxury font-bold">${vehicle.brand || 'Unknown'} ${vehicle.model || ''}</h2>
-              <p class="text-gray-400 text-sm">${vehicle.year || 'N/A'} • ${vehicle.body_type || 'Sedan'}</p>
+              <h2 class="text-2xl font-luxury font-bold">${vehicle.make || 'Unknown'} ${vehicle.model || ''}</h2>
+              <p class="text-gray-400 text-sm">${vehicle.year || 'N/A'} • ${vehicle.location || 'Korea'}</p>
             </div>
             ${isKorean ? '<span class="bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full"><i class="fas fa-gem"></i> Import Kore</span>' : ''}
           </div>
@@ -644,17 +522,26 @@
           <div class="grid grid-cols-2 gap-3">
             <div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Çmimi (EUR)</p><p class="text-2xl font-bold text-blue-400">€${priceEUR.toLocaleString()}</p></div>
             <div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Çmimi (USD)</p><p class="text-lg font-semibold">$${priceUSD.toLocaleString()}</p></div>
+            <div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Çmimi (KRW)</p><p class="text-lg font-semibold">₩${priceKRW.toLocaleString()}</p></div>
             <div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Kilometrazhi</p><p class="text-lg font-semibold">${kmValue.toLocaleString()} km</p></div>
             <div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Viti i Prodhimit</p><p class="text-lg font-semibold">${vehicle.year || 'N/A'}</p></div>
-            <div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Motori</p><p class="text-lg font-semibold">${engineCC} cc</p></div>
-            <div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Transmisioni</p><p class="text-sm">${vehicle.transmission || 'Automatik'}</p></div>
-            <div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Lloji i Karburantit</p><p class="text-sm">${vehicle.fuel_type || vehicle.engine_type || 'Benzinë'}</p></div>
-            <div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Lloji i Karrocerisë</p><p class="text-sm">${vehicle.body_type || 'Sedan'}</p></div>
-            ${vehicle.color ? `<div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Ngjyra</p><p class="text-sm">${vehicle.color}</p></div>` : ''}
-            ${vehicle.address ? `<div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Lokacioni</p><p class="text-sm">${vehicle.address}</p></div>` : ''}
+            <div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Lokacioni</p><p class="text-sm">${vehicle.location || 'N/A'}</p></div>
+            <div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Shitësi</p><p class="text-sm">${vehicle.seller || 'Dealer'}</p></div>
+            ${vehicle.specifications ? `
+              <div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Motori</p><p class="text-sm">${vehicle.specifications.engine || 'N/A'}</p></div>
+              <div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Transmisioni</p><p class="text-sm">${vehicle.specifications.transmission || 'N/A'}</p></div>
+              <div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Karburanti</p><p class="text-sm">${vehicle.specifications.fuel_type || 'N/A'}</p></div>
+              <div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Ngjyra</p><p class="text-sm">${vehicle.specifications.color || 'N/A'}</p></div>
+            ` : ''}
           </div>
           
-          <button onclick="requestOffer('${vehicle.brand} ${vehicle.model}')" class="btn-primary text-white font-semibold w-full py-3 rounded-xl">
+          ${vehicle.description ? `<div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs">Përshkrimi</p><p class="text-sm">${vehicle.description}</p></div>` : ''}
+          
+          ${vehicle.url ? `<a href="${vehicle.url}" target="_blank" class="btn-primary text-white font-semibold w-full py-3 rounded-xl text-center block mt-2">
+            <i class="fas fa-external-link-alt mr-2"></i> Shiko në Encar
+          </a>` : ''}
+          
+          <button onclick="requestOffer('${vehicle.make} ${vehicle.model}')" class="btn-primary text-white font-semibold w-full py-3 rounded-xl">
             <i class="fas fa-envelope mr-2"></i> Kërko Ofertë
           </button>
         </div>
@@ -676,8 +563,9 @@
       document.body.style.overflow = '';
     };
     
-    // Paginimi
+    // Pagination
     function renderPagination(totalPages) {
+      const paginationWrapper = document.getElementById('paginationWrapper');
       if (totalPages <= 1) {
         paginationWrapper.innerHTML = '';
         return;
@@ -717,31 +605,31 @@
     }
     
     // Event Listeners
-    document.getElementById('brandFilter').addEventListener('change', updateModelDropdown);
     document.getElementById('searchBtn').addEventListener('click', () => {
       currentPage = 1;
       fetchVehicles();
     });
     
     document.getElementById('resetBtn').addEventListener('click', () => {
-      document.getElementById('brandFilter').value = '';
-      document.getElementById('modelFilter').innerHTML = '<option value="">Të gjitha Modelet</option>';
-      document.getElementById('engineFilter').value = '';
-      document.getElementById('fuelType').value = '';
-      document.getElementById('transmission').value = '';
+      document.getElementById('makeFilter').value = '';
+      document.getElementById('modelFilter').value = '';
       document.getElementById('minPrice').value = '';
       document.getElementById('maxPrice').value = '';
       document.getElementById('minYear').value = '';
       document.getElementById('maxYear').value = '';
       document.getElementById('minMileage').value = '';
       document.getElementById('maxMileage').value = '';
-      document.getElementById('bodyType').value = '';
       currentPage = 1;
       fetchVehicles();
     });
     
+    // Enter key search
+    ['modelFilter', 'minPrice', 'maxPrice', 'minYear', 'maxYear', 'minMileage', 'maxMileage'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('keypress', (e) => { if (e.key === 'Enter') fetchVehicles(); });
+    });
+    
     // Initial load
-    updateModelDropdown();
     fetchVehicles();
     
     // Active nav highlight
