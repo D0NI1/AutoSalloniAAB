@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const API_KEY = 'car_OBvs4gF1Z9_H0r16w6EsQaGzUzbU-FCgfIA4hdTFlv0';
+const API_KEY = 'car_MmD8D4AHfaMV5IwAu7cHghc7rUos0P0Np23h6ALkL08';
 
 // Use the endpoint you asked about
 app.get('/api/vehicles', async (req, res) => {
