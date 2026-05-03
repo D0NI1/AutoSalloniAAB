@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Auto Salloni AAB | Veturat në Stock</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    body { background: #0A0C10; scroll-behavior: smooth; }
+    .font-luxury { font-family: 'Playfair Display', serif; }
+    
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #14161c; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+    
+    .stock-hero {
+      background-image: url('https://images.unsplash.com/photo-1550355291-bbee04a6e0d2?q=80&w=1920');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    .stock-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.85) 100%);
+    }
+    
+    .nav-link {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after, .nav-link.active::after {
+      width: 100%;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: #3b82f6;
+    }
+    
+    .logo-link {
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .logo-link:hover {
+      transform: scale(1.05);
+    }
+    
+    .car-card {
+      background: #111317;
+      border: 1px solid #1e293b;
+      border-radius: 1.5rem;
+      transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
+      overflow: hidden;
+    }
+    .car-card:hover {
+      transform: translateY(-8px);
+      border-color: #3b82f6;
+      box-shadow: 0 30px 40px -20px rgba(59, 130, 246, 0.4);
+      background: #151a24;
+    }
+    
+    .instagram-media {
+      margin: 0 !important;
+      min-width: auto !important;
+      width: 100% !important;
+      background: #111317 !important;
+      border: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+    }
+    
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      transition: all 0.3s ease;
+    }
+    .btn-whatsapp:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px -5px rgba(37, 211, 102, 0.4);
+    }
+    
+    .stat-badge { 
+      background: linear-gradient(135deg, #1e293b, #0f172a); 
+      border-left: 3px solid #3b82f6; 
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .car-card { animation: fadeInUp 0.5s ease backwards; }
+    
+    .price-badge {
+      background: linear-gradient(135deg, #1e3a5f, #0f2b45);
+      border-radius: 1rem;
+      padding: 0.25rem 1rem;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    
+    @media (max-width: 640px) {
+      .hero-title { font-size: 2rem; }
+      .container { padding-left: 1rem; padding-right: 1rem; }
+    }
+    
+    .loading-spinner {
+      border: 3px solid rgba(59, 130, 246, 0.2);
+      border-top: 3px solid #3b82f6;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body class="text-gray-200 antialiased">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 border-b border-blue-500/20 bg-black/95 backdrop-blur-xl shadow-2xl">
+    <div class="container mx-auto px-4 md:px-6 py-3 md:py-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3 logo-link" onclick="window.location.href='index.html'">
+          <img src="logo.png" alt="Auto Salloni AAB" class="w-12 h-12 object-contain rounded-lg" onerror="this.src='https://placehold.co/48x48/1e293b/3b82f6?text=AAB'">
+          <div class="leading-tight">
+            <h1 class="text-xl md:text-2xl font-luxury font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Auto Salloni AAB</h1>
+            <p class="text-[8px] md:text-[10px] text-blue-400/80 -mt-1 tracking-wide">IMPORT PREMIUM I AUTOMJETEVE</p>
+          </div>
+        </div>
+        
+        <nav class="hidden md:flex gap-6 lg:gap-8 text-sm font-medium">
+          <a href="index.html" class="nav-link transition">Ballina</a>
+          <a href="index.html#inventory" class="nav-link transition">Inventari</a>
+          <a href="veturat.html" class="nav-link transition active">Veturat në Stok</a>
+          <a href="index.html#about" class="nav-link transition">Rreth Nesh</a>
+          <a href="index.html#contact" class="nav-link transition">Kontakt</a>
+        </nav>
+        
+        <div class="flex gap-2 text-sm">
+          <a href="https://wa.me/38348100175" target="_blank" class="hidden lg:flex items-center gap-2 bg-green-600/20 hover:bg-green-600/30 px-3 md:px-4 py-2 rounded-full border border-green-500/30 transition-all duration-300">
+            <i class="fab fa-whatsapp text-green-400 text-sm"></i>
+            <span class="text-xs">+383 48 100 175</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex md:hidden justify-around bg-black/95 border-t border-gray-800 py-2 text-xs">
+      <a href="index.html" class="flex flex-col items-center gap-1 transition hover:text-blue-400"><i class="fas fa-home text-blue-400"></i><span>Ballina</span></a>
+      <a href="veturat.html" class="flex flex-col items-center gap-1 transition hover:text-blue-400"><i class="fas fa-car text-blue-400"></i><span>Veturat</span></a>
+      <a href="index.html#about" class="flex flex-col items-center gap-1 transition hover:text-blue-400"><i class="fas fa-info-circle"></i><span>Rreth</span></a>
+      <a href="index.html#contact" class="flex flex-col items-center gap-1 transition hover:text-blue-400"><i class="fas fa-headset"></i><span>Kontakt</span></a>
+    </div>
+  </header>
+
+  <!-- STOCK HERO SECTION -->
+  <section class="stock-hero relative overflow-hidden py-16 md:py-24">
+    <div class="relative z-10 container mx-auto px-4 md:px-6 text-center">
+      <h1 class="text-3xl md:text-5xl font-luxury font-bold mb-4">Veturat në <span class="text-blue-400">Stok</span></h1>
+      <p class="text-gray-300 text-base md:text-lg max-w-2xl mx-auto">Shfletoni automjetet që kemi aktualisht në magazinë. Postimet e Instagramit tregojnë të gjitha detajet dhe fotot reale.</p>
+    </div>
+  </section>
+
+  <!-- STOCK INVENTORY SECTION -->
+  <main class="container mx-auto px-4 md:px-6 py-12 md:py-16">
+    <div class="stat-badge flex justify-between items-center rounded-xl px-5 py-3 mb-8">
+      <div><i class="fab fa-instagram text-pink-500 mr-2"></i><span id="stockCount" class="text-sm font-medium">Duke ngarkuar...</span></div>
+      <div class="flex gap-2 text-xs">
+        <span class="bg-blue-500/10 px-3 py-1 rounded-full"><i class="fas fa-check-circle text-green-400"></i> Në dispozicion</span>
+        <span class="bg-purple-500/10 px-3 py-1 rounded-full"><i class="fab fa-instagram text-pink-400"></i> Postime origjinale</span>
+      </div>
+    </div>
+
+    <div id="loadingIndicator" class="py-16 text-center">
+      <div class="loading-spinner"></div>
+      <p class="mt-4 text-blue-400">Duke ngarkuar inventarin nga Instagram...</p>
+    </div>
+
+    <div id="carsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 hidden"></div>
+    <div id="paginationWrapper" class="mt-10 flex justify-center hidden"></div>
+  </main>
+
+  <!-- CTA SECTION -->
+  <section class="border-t border-gray-800 bg-gradient-to-b from-black to-gray-900 py-16">
+    <div class="container mx-auto px-4 md:px-6 text-center">
+      <h2 class="text-2xl md:text-3xl font-luxury font-bold mb-4">Nuk e gjetët makinën që po kërkoni?</h2>
+      <p class="text-gray-300 mb-6">Na kontaktoni dhe ne do t'ju sjellim automjetin që dëshironi nga Korea ose Gjermania.</p>
+      <a href="https://wa.me/38348100175" target="_blank" class="btn-whatsapp text-white font-semibold px-8 py-3 rounded-xl inline-flex items-center gap-2">
+        <i class="fab fa-whatsapp text-xl"></i> Porosit me WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contact" class="border-t border-gray-800 bg-black py-12">
+    <div class="container mx-auto px-4 md:px-6">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <div class="flex items-center gap-2 mb-4 cursor-pointer" onclick="window.location.href='index.html'">
+            <img src="logo.png" alt="Auto Salloni AAB" class="w-10 h-10 object-contain rounded-lg" onerror="this.src='https://placehold.co/40x40/1e293b/3b82f6?text=AAB'">
+            <span class="font-luxury text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Auto Sallon AAB</span>
+          </div>
+          <p class="text-gray-400 text-sm">Importues specializuar i automjeteve koreane.</p>
+        </div>
+        
+        <div>
+          <h3 class="font-semibold mb-3 text-blue-400">Kontakt</h3>
+          <p class="text-gray-400 text-sm mb-2"><i class="fab fa-whatsapp w-5 text-green-400"></i> +383 48 100 175</p>
+          <p class="text-gray-400 text-sm mb-2"><i class="fas fa-phone-alt w-5 text-blue-400"></i> +383 48 100 175</p>
+          <p class="text-gray-400 text-sm mb-2">
+            <i class="fas fa-envelope w-5 text-blue-400"></i> 
+            <a href="mailto:aabpremiumcars@gmail.com" class="hover:text-blue-400 transition">aabpremiumcars@gmail.com</a>
+          </p>
+        </div>
+        
+        <div>
+          <h3 class="font-semibold mb-3 text-blue-400">Na Ndiqni</h3>
+          <div class="flex gap-4">
+            <a href="https://www.instagram.com/autosalloniaab/" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gradient-to-r hover:from-pink-500 hover:to-orange-500 transition-all">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.facebook.com/people/Autosalloni-AAB/61578295328971/" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 transition-all">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://www.tiktok.com/@autosalloniaab" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gradient-to-r hover:from-black hover:to-gray-700 transition-all">
+              <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://wa.me/38348100175" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-green-600 transition-all">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div>
+          <h3 class="font-semibold mb-3 text-blue-400">Lokacioni</h3>
+          <div class="rounded-xl overflow-hidden border border-gray-700">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2953.5472037384807!2d20.722051900000004!3d42.245485599999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13539569d6355e9f%3A0x7a89660cfa24512a!2sAuto%20Salloni%20AAB!5e0!3m2!1sen!2s!4v1777822805248!5m2!1sen!2s" width="100%" height="150" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+          </div>
+          <p class="text-gray-400 text-xs mt-2">Prishtinë & Durrës, Kosovë</p>
+        </div>
+      </div>
+      
+      <div class="text-center text-gray-500 text-xs pt-8 border-t border-gray-800">
+        <p class="mb-2">© 2026 Auto Salloni AAB — Të gjitha të drejtat e rezervuara</p>
+        <p class="flex items-center justify-center gap-2">
+          <span>Developed by</span>
+          <a href="https://dynamix-dev.netlify.app" target="_blank" class="flex items-center gap-1 hover:opacity-80 transition group">
+            <img src="https://img.magnific.com/premium-vector/golden-letter-d-symbol-black-background-icon-6_95164-5562.jpg" alt="D" class="w-5 h-5 rounded-full object-cover group-hover:scale-110 transition-transform" onerror="this.onerror=null; this.src='https://placehold.co/20x20/f59e0b/ffffff?text=D'">
+            <span class="font-semibold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Dynamix</span>
+          </a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script async src="//www.instagram.com/embed.js"></script>
+  
+  <script>
+    // ============================================
+    // ADD YOUR INSTAGRAM POSTS HERE
+    // Each object = one car card with its own Instagram post
+    // Now using price_eur directly - just type the price in Euros!
+    // ============================================
+    
+    const instagramPosts = [
+      {
+        id: 1,
+        url: "https://www.instagram.com/p/DWZPQYQDcP8/",  // <-- YOUR FIRST INSTAGRAM POST URL
+        carInfo: {
+          brand: "Porsche",
+          model: "Macan S",
+          year: 2016,
+          price_eur: 27900,  // <-- Price in Euros directly
+          mileage: 177000,
+          fuel_type: "Diesel",
+          transmission: "Automatik",
+          body: "SUV"
+        }
+      },
+      {
+        id: 2,
+        url: "https://www.instagram.com/p/DWZqGAqDdMQ/",  // <-- YOUR SECOND INSTAGRAM POST URL
+        carInfo: {
+          brand: "Land Rover",
+          model: "Discovery Sport",
+          year: 2017,
+          price_eur: 14900,  // <-- Price in Euros directly
+          mileage: 187000,
+          fuel_type: "Diesel",
+          transmission: "Automatik",
+          body: "SUV"
+        }
+      },
+      {
+        id: 3,
+        url: "https://www.instagram.com/p/DWZ3E-JjaBa/",  // <-- YOUR THIRD INSTAGRAM POST URL
+        carInfo: {
+          brand: "Mercedes-Benz",
+          model: "CLS 53 AMG",
+          year: 2019,
+          price_eur: 42900,  // <-- Price in Euros directly
+          mileage: 190000,
+          fuel_type: "Benzin",
+          transmission: "Automatik",
+          body: "Coupe"
+        }
+      },
+      {
+        id: 4,
+        url: "https://www.instagram.com/p/DWbS8XtjWQr/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR FOURTH INSTAGRAM POST URL
+        carInfo: {
+          brand: "Jaguar",
+          model: "E-PACE D180",
+          year: 2018,
+          price_eur: 19900,  // <-- Price in Euros directly
+          mileage: 167000,
+          fuel_type: "Diesel",
+          transmission: "Automatik",
+          body: "SUV"
+        }
+      },
+      {
+        id: 5,
+        url: "https://www.instagram.com/p/DWb6otcjeCb/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR FIFTH INSTAGRAM POST URL
+        carInfo: {
+          brand: "Mercedes-Benz",
+          model: "C220d",
+          year: 2019,
+          price_eur: 21900,  // <-- Price in Euros directly
+          mileage: 177000,
+          fuel_type: "Diesel",
+          transmission: "Automatik",
+          body: "Sedan"
+        }
+      },
+      {
+        id: 6,
+        url: "https://www.instagram.com/p/DWcLR-aDW6y/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+        carInfo: {
+          brand: "Mercedes-Benz",
+          model: "E220d",
+          year: 2020,
+          price_eur: 34900,  // <-- Price in Euros directly
+          mileage: 121000,
+          fuel_type: "Diesel",
+          transmission: "Automatik",
+          body: "Sedan"
+        }
+      },
+       {
+        id: 7,
+        url: "https://www.instagram.com/p/DWd-XMUDXOX/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+        carInfo: {
+          brand: "Volkswagen",
+          model: "Arteon 2.0 TDI",
+          year: 2019,
+          price_eur: 22900,  // <-- Price in Euros directly
+          mileage: 65000,
+          fuel_type: "Diesel",
+          transmission: "Automatik",
+          body: "Sedan"
+        }
+      },
+         {
+          id: 8,
+          url: "https://www.instagram.com/p/DWebCmDjW3R/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+          carInfo: {
+             brand: "Peugeot",
+             model: "3008 1.6 BlueHDi",
+             year: 2017,
+             price_eur: 15900,  // <-- Price in Euros directly
+             mileage: 127000,
+             fuel_type: "Diesel",
+             transmission: "Automatik",
+             body: "SUV"
+          }
+        },
+         {
+          id: 9,
+          url: "https://www.instagram.com/p/DWegmwgjeEY/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+          carInfo: {
+             brand: "Mercedes-Benz",
+             model: "C220d",
+             year: 2018,
+             price_eur: 20700,  // <-- Price in Euros directly
+             mileage: 169000,
+             fuel_type: "Diesel",
+             transmission: "Automatik",
+             body: "Sedan"
+          }
+        },
+         {
+          id: 10,
+          url: "https://www.instagram.com/p/DWg5UIHjQth/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+          carInfo: {
+             brand: "Kia",
+             model: "Stinger 2.0 T-GDi GT Line",
+             year: 2017,
+             price_eur: 17900,  // <-- Price in Euros directly
+             mileage: 168000,
+             fuel_type: "Benzin",
+             transmission: "Automatik",
+             body: "Sedan"
+          }
+        },
+         {
+          id: 11,
+          url: "https://www.instagram.com/p/DWhFN0Djcx2/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+          carInfo: {
+             brand: "BMW",
+             model: "520d Luxury Line",
+             year: 2018,
+             price_eur: 22500,  // <-- Price in Euros directly
+             mileage: 156000,
+             fuel_type: "Diesel",
+             transmission: "Automatik",
+             body: "Sedan"
+          }
+        },
+            {
+            id: 12,
+            url: "https://www.instagram.com/p/DWi5X2UDbCt/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+            carInfo: {
+                brand: "Audi",
+                model: "A6 40 TDI Quattro S-Line",
+                year: 2020,
+                price_eur: 27600,  // <-- Price in Euros directly
+                mileage: 107000,
+                fuel_type: "Diesel",
+                transmission: "Automatik",
+                body: "Sedan"
+            }
+            },
+            {
+            id: 13,
+            url: "https://www.instagram.com/p/DWjWs_eiFYe/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+            carInfo: {
+                brand: "BMW",
+                model: "X6 30d M Paket",
+                year: 2016,
+                price_eur: 27700,  // <-- Price in Euros directly
+                mileage: 159000,
+                fuel_type: "Diesel",
+                transmission: "Automatik",
+                body: "SUV"
+            }
+            },
+            {
+            id: 14,
+            url: "https://www.instagram.com/p/DWlclUSjb8o/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+            carInfo: {
+                brand: "Volkswagen",
+                model: "Arteon 2.0 TDI",
+                year: 2019,
+                price_eur: 20900,  // <-- Price in Euros directly
+                mileage: 133000,
+                fuel_type: "Diesel",
+                transmission: "Automatik",
+                body: "Sedan"
+            }
+            },
+            {
+            id: 15,
+            url: "https://www.instagram.com/p/DWmBs2PiD1_/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+            carInfo: {
+                brand: "Mini-Cooper",
+                model: "Sport Diesel",
+                year: 2016,
+                price_eur: 13500,  // <-- Price in Euros directly
+                mileage: 163000,
+                fuel_type: "Diesel",
+                transmission: "Automatik",
+                body: "Mini"
+            }
+            },
+              {
+            id: 16,
+            url: "https://www.instagram.com/p/DWoC7l3jaNh/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+            carInfo: {
+                brand: "BMW",
+                model: "218d Gran Coupe",
+                year: 2020,
+                price_eur: 22500,  // <-- Price in Euros directly
+                mileage: 107000,
+                fuel_type: "Diesel",
+                transmission: "Automatik",
+                body: "Coupe"
+            }
+            },
+            {
+            id: 17,
+            url: "https://www.instagram.com/p/DWoqYdViIht/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+            carInfo: {
+                brand: "BMW",
+                model: "118d M Packet",
+                year: 2020,
+                price_eur: 20700,  // <-- Price in Euros directly
+                mileage: 162000,
+                fuel_type: "Diesel",
+                transmission: "Automatik",
+                body: "Coupe"
+            }
+            },
+            {
+            id: 18,
+            url: "https://www.instagram.com/p/DWtvFw-DbuN/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+            carInfo: {
+                brand: "Jaguar",
+                model: "E-PACE P250",
+                year: 2018,
+                price_eur: 18300,  // <-- Price in Euros directly
+                mileage: 118000,
+                fuel_type: "Benzin",
+                transmission: "Automatik",
+                body: "SUV"
+            }
+            },
+              {
+            id: 19,
+            url: "https://www.instagram.com/p/DWwRkzlDQ6X/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+            carInfo: {
+                brand: "BMW",
+                model: "X1 18d xDrive",
+                year: 2017,
+                price_eur: 15300,  // <-- Price in Euros directly
+                mileage: 202000,
+                fuel_type: "Diesel",
+                transmission: "Automatik",
+                body: "SUV"
+            }
+            },
+            {
+            id: 20,
+            url: "https://www.instagram.com/p/DW1f0-rAk3C/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+            carInfo: {
+                brand: "Audi",
+                model: "A6 45TFSI Quattro S-Line",
+                year: 2019,
+                price_eur: 20700,  // <-- Price in Euros directly
+                mileage: 171000,
+                fuel_type: "Benzin",
+                transmission: "Automatik",
+                body: "Sedan"
+            }
+            },
+             {
+            id: 21,
+            url: "https://www.instagram.com/p/DW6rbuMCIeX/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+            carInfo: {
+                brand: "Cam Am",
+                model: "Maverick XRS ",
+                year: 2022,
+                price_eur: 29900,  // <-- Price in Euros directly
+                mileage: 10000,
+                fuel_type: "null",
+                transmission: "Automatik",
+                body: "Off-Road"
+            }
+            },
+             {
+            id: 22,
+            url: "https://www.instagram.com/p/DXgsRu4DQm-/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",  // <-- YOUR SIXTH INSTAGRAM POST URL
+            carInfo: {
+                brand: "Mercedes-Benz",
+                model: "GLE 63 AMG Coupe",
+                year: 2016,
+                price_eur: 37000,  // <-- Price in Euros directly
+                mileage: 183000,
+                fuel_type: "Benzin",
+                transmission: "Automatik",
+                body: "SUV"
+            }
+            },
+            
+        
+        
+    ];
+    
+    let allCars = [];
+    let currentPage = 1;
+    const itemsPerPage = 22;
+    
+    function loadCars() {
+      document.getElementById('loadingIndicator').classList.remove('hidden');
+      
+      allCars = instagramPosts.map(post => ({
+        id: post.id,
+        instagramUrl: post.url,
+        ...post.carInfo,
+        status: "available"
+      }));
+      
+      document.getElementById('stockCount').innerHTML = `${allCars.length} automjete në stok`;
+      document.getElementById('loadingIndicator').classList.add('hidden');
+      document.getElementById('carsGrid').classList.remove('hidden');
+      document.getElementById('paginationWrapper').classList.remove('hidden');
+      
+      renderCars();
+      
+      setTimeout(() => {
+        if (window.instgrm) {
+          window.instgrm.Embeds.process();
+        }
+      }, 200);
+    }
+    
+    function sendWhatsApp(brand, model, year, priceEur, mileage, url) {
+      const msg = `🚗 *Auto Salloni AAB - Kërkesë për Automjet* 🚗\n\n📌 *Makina:* ${brand} ${model}\n📅 *Viti:* ${year}\n💰 *Çmimi:* €${priceEur.toLocaleString()}\n📏 *Kilometrazhi:* ${mileage.toLocaleString()} km\n🔗 *Instagram:* ${url}\n\nJam i interesuar për këtë automjet. A mund të më jepni më shumë detaje?`;
+      window.open(`https://wa.me/38348100175?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+    
+    function renderCars() {
+      const totalPages = Math.ceil(allCars.length / itemsPerPage);
+      const start = (currentPage - 1) * itemsPerPage;
+      const pageCars = allCars.slice(start, start + itemsPerPage);
+      
+      if (pageCars.length === 0) {
+        document.getElementById('carsGrid').innerHTML = `<div class="col-span-full text-center py-16"><i class="fab fa-instagram text-5xl text-gray-600 mb-4"></i><p class="text-gray-400">Nuk ka automjete në stok për momentin.</p></div>`;
+        return;
+      }
+      
+      const grid = document.getElementById('carsGrid');
+      grid.innerHTML = pageCars.map((car, idx) => {
+        // Use price_eur directly - no conversion needed
+        const priceEur = car.price_eur;
+        
+        return `
+          <div class="car-card rounded-2xl" style="animation-delay: ${idx * 0.1}s">
+            <!-- Car Info Header -->
+            <div class="p-4 bg-gradient-to-r from-gray-900/80 to-gray-800/40 border-b border-gray-800">
+              <div class="flex justify-between items-start flex-wrap gap-3">
+                <div>
+                  <h3 class="text-xl font-bold">${car.brand} ${car.model}</h3>
+                  <div class="flex flex-wrap gap-3 text-gray-400 text-xs mt-1">
+                    <span><i class="far fa-calendar-alt text-blue-400"></i> ${car.year}</span>
+                    <span><i class="fas fa-tachometer-alt text-blue-400"></i> ${car.mileage.toLocaleString()} km</span>
+                    <span><i class="fas fa-car text-blue-400"></i> ${car.body}</span>
+                  </div>
+                </div>
+                <div class="price-badge">
+                  <p class="text-xl font-bold text-blue-400">€${priceEur.toLocaleString()}</p>
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-2 mt-3">
+                <span class="bg-gray-800/60 px-3 py-1 rounded-full text-xs"><i class="fas fa-gas-pump text-blue-400"></i> ${car.fuel_type}</span>
+                <span class="bg-gray-800/60 px-3 py-1 rounded-full text-xs"><i class="fas fa-cogs text-blue-400"></i> ${car.transmission}</span>
+                <span class="bg-green-500/20 px-3 py-1 rounded-full text-xs"><i class="fas fa-check-circle text-green-400"></i> Në stok</span>
+              </div>
+            </div>
+            
+            <!-- Instagram Embed -->
+            <div class="instagram-embed-wrapper">
+              <blockquote class="instagram-media" data-instgrm-permalink="${car.instagramUrl}?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);">
+                <div style="padding:16px;"> 
+                  <a href="${car.instagramUrl}?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> 
+                    <div style=" display: flex; flex-direction: row; align-items: center;"> 
+                      <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> 
+                      <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> 
+                        <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div>
+                        <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div>
+                      </div>
+                    </div>
+                    <div style="padding: 19% 0;"></div>
+                    <div style="display:block; height:50px; margin:0 auto 12px; width:50px;">
+                      <svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                          <g transform="translate(-511.000000, -20.000000)" fill="#000000">
+                            <g>
+                              <path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path>
+                            </g>
+                          </g>
+                        </g>
+                      </svg>
+                    </div>
+                    <div style="padding-top: 8px;"> 
+                      <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">View this post on Instagram</div>
+                    </div>
+                    <div style="padding: 12.5% 0;"></div>
+                    <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;">
+                      <div>
+                        <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div>
+                        <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div>
+                        <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div>
+                      </div>
+                      <div style="margin-left: 8px;">
+                        <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div>
+                        <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div>
+                      </div>
+                      <div style="margin-left: auto;">
+                        <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div>
+                        <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div>
+                        <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div>
+                      </div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;">
+                      <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div>
+                      <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div>
+                    </div>
+                  </a>
+                  <p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;">
+                    <a href="${car.instagramUrl}?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">A post shared by Auto Salloni AAB (@autosalloniaab)</a>
+                  </p>
+                </div>
+              </blockquote>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="p-4 border-t border-gray-800 bg-gray-900/30">
+              <div class="flex gap-3">
+                <a href="${car.instagramUrl}" target="_blank" class="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 py-2.5 rounded-xl text-sm transition text-center flex items-center justify-center gap-2 font-medium">
+                  <i class="fab fa-instagram"></i> Shiko në Instagram
+                </a>
+                <button onclick='sendWhatsApp("${car.brand}", "${car.model}", ${car.year}, ${car.price_eur}, ${car.mileage}, "${car.instagramUrl}")' class="flex-1 btn-whatsapp text-white font-semibold py-2.5 rounded-xl text-sm transition flex items-center justify-center gap-2">
+                  <i class="fab fa-whatsapp"></i> Porosit
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      renderPagination(totalPages);
+      
+      setTimeout(() => {
+        if (window.instgrm) {
+          window.instgrm.Embeds.process();
+        }
+      }, 200);
+    }
+    
+    function renderPagination(total) {
+      const wrapper = document.getElementById('paginationWrapper');
+      if (total <= 1) { wrapper.innerHTML = ''; return; }
+      
+      let html = '<div class="flex gap-2 flex-wrap justify-center">';
+      if (currentPage > 1) {
+        html += `<button onclick="changePage(${currentPage - 1})" class="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition"><i class="fas fa-chevron-left"></i></button>`;
+      }
+      for (let i = 1; i <= total; i++) {
+        if (i === 1 || i === total || (i >= currentPage - 1 && i <= currentPage + 1)) {
+          html += `<button onclick="changePage(${i})" class="px-4 py-2 rounded-lg transition ${i === currentPage ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' : 'bg-gray-800 hover:bg-gray-700'}">${i}</button>`;
+        } else if (i === currentPage - 2 || i === currentPage + 2) {
+          html += `<span class="px-2 py-2 text-gray-500">...</span>`;
+        }
+      }
+      if (currentPage < total) {
+        html += `<button onclick="changePage(${currentPage + 1})" class="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition"><i class="fas fa-chevron-right"></i></button>`;
+      }
+      html += '</div>';
+      wrapper.innerHTML = html;
+    }
+    
+    window.changePage = function(page) {
+      currentPage = page;
+      renderCars();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    window.sendWhatsApp = sendWhatsApp;
+    
+    document.addEventListener('DOMContentLoaded', loadCars);
+  </script>
+</body>
+</html>
