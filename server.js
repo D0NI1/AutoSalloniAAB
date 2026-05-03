@@ -8,7 +8,6 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Your CarAPIS API Key
 const CARAPIS_API_KEY = 'car_OBvs4gF1Z9_H0r16w6EsQaGzUzbU-FCgfIA4hdTFlv0';
 const BASE_URL = 'https://api.carapis.com/apix/catalog_private/vehicles';
 
@@ -30,57 +29,44 @@ app.get('/api/vehicles', async (req, res) => {
         
         console.log('📡 Fetching from CarAPIS:', url.toString());
         
-        // TRY DIFFERENT AUTHENTICATION METHODS:
-        
-        // Method 1: Bearer Token (current)
+        // Add browser-like headers to bypass Cloudflare
         const response = await fetch(url.toString(), {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${CARAPIS_API_KEY}`,
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Referer': 'https://www.carapis.com/',
+                'Origin': 'https://www.carapis.com'
             }
         });
-        
-        // If Method 1 fails with 403, uncomment and try Method 2:
-        /*
-        const response = await fetch(url.toString(), {
-            method: 'GET',
-            headers: {
-                'x-api-key': CARAPIS_API_KEY,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        });
-        */
-        
-        // If Method 2 fails, try Method 3 (API key as query param):
-        /*
-        const urlWithKey = new URL(url.toString());
-        urlWithKey.searchParams.append('api_key', CARAPIS_API_KEY);
-        const response = await fetch(urlWithKey.toString(), {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        });
-        */
         
         console.log('📡 Response status:', response.status);
         
         if (!response.ok) {
             const errorText = await response.text();
-            console.error('❌ CarAPIS Error:', response.status, errorText);
+            console.error('❌ CarAPIS Error:', response.status);
+            
+            // Check if it's Cloudflare challenge
+            if (errorText.includes('Just a moment') || errorText.includes('cloudflare')) {
+                return res.status(403).json({ 
+                    error: 'Cloudflare protection detected',
+                    message: 'CarAPIS API is blocking server requests. Contact CarAPIS support to whitelist your server IP.',
+                    solution: 'Email support@carapis.com with your Render.com server IP'
+                });
+            }
+            
             return res.status(response.status).json({ 
                 error: `CarAPIS API Error: ${response.status}`,
-                details: errorText,
-                suggested_fix: "Check API key format or contact CarAPIS support"
+                details: errorText.substring(0, 500)
             });
         }
         
         const data = await response.json();
-        console.log('✅ Success! Fetched', data.count || data.results?.length || 0, 'vehicles');
+        console.log('✅ Success!');
         res.json(data);
         
     } catch (error) {
@@ -96,20 +82,10 @@ app.get('/health', (req, res) => {
     res.json({ 
         status: 'OK', 
         timestamp: new Date().toISOString(),
-        api_key_configured: true,
-        api_key_prefix: CARAPIS_API_KEY.substring(0, 10) + '...'
-    });
-});
-
-app.get('/', (req, res) => {
-    res.json({
-        name: 'AAB CarAPIS Proxy',
-        status: 'running',
-        endpoints: ['/health', '/api/vehicles']
+        message: 'Backend is running, but CarAPIS may be blocking requests'
     });
 });
 
 app.listen(PORT, () => {
     console.log(`✅ Server running on port ${PORT}`);
-    console.log(`✅ API Key configured: ${CARAPIS_API_KEY.substring(0, 10)}...`);
 });
