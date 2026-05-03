@@ -12,20 +12,15 @@ app.use(express.json());
 const CARAPIS_API_KEY = 'car_OBvs4gF1Z9_H0r16w6EsQaGzUzbU-FCgfIA4hdTFlv0';
 const BASE_URL = 'https://api.carapis.com/apix/catalog_private/vehicles';
 
-// Proxy endpoint for vehicles
 app.get('/api/vehicles', async (req, res) => {
     try {
-        // Get all query parameters
         const queryParams = { ...req.query };
         
-        // Remove page_size as CarAPIS might use different param
-        // Let's use limit instead
         if (queryParams.page_size) {
             queryParams.limit = queryParams.page_size;
             delete queryParams.page_size;
         }
         
-        // Build URL with parameters
         const url = new URL(BASE_URL);
         Object.keys(queryParams).forEach(key => {
             if (queryParams[key] && queryParams[key] !== '') {
@@ -35,6 +30,9 @@ app.get('/api/vehicles', async (req, res) => {
         
         console.log('📡 Fetching from CarAPIS:', url.toString());
         
+        // TRY DIFFERENT AUTHENTICATION METHODS:
+        
+        // Method 1: Bearer Token (current)
         const response = await fetch(url.toString(), {
             method: 'GET',
             headers: {
@@ -44,6 +42,31 @@ app.get('/api/vehicles', async (req, res) => {
             }
         });
         
+        // If Method 1 fails with 403, uncomment and try Method 2:
+        /*
+        const response = await fetch(url.toString(), {
+            method: 'GET',
+            headers: {
+                'x-api-key': CARAPIS_API_KEY,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        });
+        */
+        
+        // If Method 2 fails, try Method 3 (API key as query param):
+        /*
+        const urlWithKey = new URL(url.toString());
+        urlWithKey.searchParams.append('api_key', CARAPIS_API_KEY);
+        const response = await fetch(urlWithKey.toString(), {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        });
+        */
+        
         console.log('📡 Response status:', response.status);
         
         if (!response.ok) {
@@ -51,45 +74,42 @@ app.get('/api/vehicles', async (req, res) => {
             console.error('❌ CarAPIS Error:', response.status, errorText);
             return res.status(response.status).json({ 
                 error: `CarAPIS API Error: ${response.status}`,
-                details: errorText 
+                details: errorText,
+                suggested_fix: "Check API key format or contact CarAPIS support"
             });
         }
         
         const data = await response.json();
-        console.log('✅ Successfully fetched', data.count || data.results?.length || 0, 'vehicles');
+        console.log('✅ Success! Fetched', data.count || data.results?.length || 0, 'vehicles');
         res.json(data);
         
     } catch (error) {
         console.error('❌ Proxy Error:', error.message);
         res.status(500).json({ 
             error: 'Internal Server Error',
-            message: error.message,
-            stack: error.stack
+            message: error.message
         });
     }
 });
 
-// Health check endpoint
 app.get('/health', (req, res) => {
     res.json({ 
         status: 'OK', 
         timestamp: new Date().toISOString(),
-        api_configured: true
+        api_key_configured: true,
+        api_key_prefix: CARAPIS_API_KEY.substring(0, 10) + '...'
     });
 });
 
-// Root endpoint
 app.get('/', (req, res) => {
     res.json({
         name: 'AAB CarAPIS Proxy',
         status: 'running',
-        endpoints: ['/health', '/api/vehicles'],
-        documentation: 'Use /api/vehicles?brand=Hyundai&min_year=2018'
+        endpoints: ['/health', '/api/vehicles']
     });
 });
 
 app.listen(PORT, () => {
     console.log(`✅ Server running on port ${PORT}`);
-    console.log(`✅ Health check: http://localhost:${PORT}/health`);
-    console.log(`✅ API endpoint: http://localhost:${PORT}/api/vehicles`);
+    console.log(`✅ API Key configured: ${CARAPIS_API_KEY.substring(0, 10)}...`);
 });
