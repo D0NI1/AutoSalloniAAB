@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AAB Admin | Konvertues Makinash</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    body {
+      background: #0a0c10;
+    }
+    textarea {
+      resize: vertical;
+      font-family: 'Monaco', monospace;
+      font-size: 13px;
+    }
+    .code-block {
+      background: #0f1117;
+      border: 1px solid #2c2f3a;
+      font-family: 'Monaco', monospace;
+      font-size: 12px;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1a1d24;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #f59e0b;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body class="text-gray-200">
+
+  <!-- Header i thjeshtë -->
+  <header class="border-b border-yellow-600/20 bg-black/80 backdrop-blur sticky top-0 z-10">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <i class="fas fa-code-branch text-amber-500 text-xl"></i>
+        <span class="font-bold text-lg">AAB <span class="text-amber-400">Converter</span></span>
+        <span class="text-xs text-gray-500 hidden sm:inline">| HTML → JS Object</span>
+      </div>
+      <div class="text-xs text-gray-400">
+        <i class="fas fa-car"></i> Për katalogun dinamik
+      </div>
+    </div>
+  </header>
+
+  <!-- 2 kolona kryesore: Pyetje (HTML input) dhe Përgjigje (JS output) -->
+  <div class="container mx-auto px-4 py-6 max-w-6xl">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      
+      <!-- PANELI I MAJTË: INPUT HTML (PYETJE) -->
+      <div class="bg-[#0f1117] rounded-xl border border-gray-800 overflow-hidden shadow-lg flex flex-col">
+        <div class="bg-black/50 px-4 py-2.5 border-b border-gray-800 flex justify-between items-center">
+          <div class="flex items-center gap-2">
+            <i class="fab fa-html5 text-orange-500"></i>
+            <span class="font-semibold text-sm">📄 Ngjit HTML (struktura e makinës)</span>
+          </div>
+          <div class="flex gap-2">
+            <button id="exampleBtn" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded transition"><i class="fas fa-code"></i> Shembull</button>
+            <button id="clearBtn" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded transition"><i class="fas fa-trash-alt"></i> Pastro</button>
+          </div>
+        </div>
+        <textarea id="htmlInput" rows="14" class="w-full p-4 bg-[#0a0c10] text-gray-200 border-0 focus:ring-0 outline-none" placeholder="🎯 Ngjisni kodin HTML të makinës këtu...
+
+Shembull:
+&lt;a href=&quot;car.php?id=123&quot; class=&quot;flex...&quot;&gt;
+  &lt;img src=&quot;https://...&quot;&gt;
+  &lt;h3&gt;Audi A3 40 TFSI&lt;/h3&gt;
+  &lt;div&gt;Viti&lt;/div&gt;&lt;div&gt;2018&lt;/div&gt;
+  &lt;div&gt;Kilometra&lt;/div&gt;&lt;div&gt;168.468 km&lt;/div&gt;
+  &lt;div&gt;Karburanti&lt;/div&gt;&lt;div&gt;Gasoline&lt;/div&gt;
+  &lt;div&gt;7,275 €&lt;/div&gt;
+&lt;/a&gt;"></textarea>
+        <div class="p-3 bg-gray-900/40 border-t border-gray-800">
+          <button id="convertBtn" class="w-full bg-amber-600 hover:bg-amber-500 text-black font-bold py-2 rounded-xl transition flex items-center justify-center gap-2"><i class="fas fa-sync-alt"></i> Konverto → merr JavaScript</button>
+        </div>
+      </div>
+
+      <!-- PANELI I DJATHTË: OUTPUT JS (PËRGJIGJE) -->
+      <div class="bg-[#0f1117] rounded-xl border border-gray-800 overflow-hidden shadow-lg flex flex-col">
+        <div class="bg-black/50 px-4 py-2.5 border-b border-gray-800 flex justify-between items-center">
+          <div class="flex items-center gap-2">
+            <i class="fab fa-js text-yellow-400"></i>
+            <span class="font-semibold text-sm">✅ Objekti JavaScript (gati për carsDataset)</span>
+          </div>
+          <button id="copyBtn" class="text-xs bg-amber-600/20 hover:bg-amber-600/40 text-amber-300 px-2 py-1 rounded transition"><i class="fas fa-copy mr-1"></i> Kopjo</button>
+        </div>
+        <div class="flex-1 p-4 overflow-auto min-h-[320px]">
+          <pre id="outputJson" class="code-block p-3 rounded-lg text-gray-300 text-xs leading-relaxed overflow-x-auto whitespace-pre-wrap">// Kliko "Konverto" pasi të ngjis HTML-në
+// Do të shfaqet objekti i makinës në formatin e duhur</pre>
+        </div>
+        <div class="p-2 text-xs text-gray-500 text-center border-t border-gray-800">
+          <i class="fas fa-info-circle text-amber-500"></i> Format i përshtatshëm për array-in e katalogut AAB
+        </div>
+      </div>
+    </div>
+
+    <!-- PREVIEW i shpejtë (kartelë vizuale) -->
+    <div class="mt-6 bg-[#0f1117] rounded-xl border border-gray-800 overflow-hidden">
+      <div class="bg-black/50 px-4 py-2 border-b border-gray-800">
+        <span class="text-sm font-medium"><i class="fas fa-eye text-amber-400 mr-2"></i>Pamje paraprake e makinës</span>
+      </div>
+      <div id="previewCard" class="p-4 flex justify-center min-h-[200px] items-center text-gray-400">
+        <div class="text-center"><i class="fas fa-car-side text-3xl mb-2 opacity-40"></i><br>Konvertoni për të parë preview</div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="text-center text-gray-600 text-xs py-5 border-t border-gray-800 mt-6">
+    Autosalloni AAB — Konvertues i shpejtë nga HTML në JavaScript Object
+  </footer>
+
+  <script>
+    // Funksioni inteligjent për nxjerrjen e të dhënave nga HTML
+    function parseCarFromHTML(htmlString) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlString, 'text/html');
+      
+      // Gjej elementin kryesor (link ose div me klasa makine)
+      let cardElement = doc.querySelector('a[href*="car.php"]') || doc.querySelector('.group') || doc.querySelector('.flex');
+      if (!cardElement) throw new Error('Nuk u gjet struktura e makinës. Kërkohet <a> ose .group/.flex');
+      
+      // 1. Imazhi
+      let imgSrc = '';
+      const imgTag = cardElement.querySelector('img');
+      if (imgTag && imgTag.src) imgSrc = imgTag.src;
+      else imgSrc = 'https://placehold.co/800x500/1e1f2a/amber?text=AAB';
+      
+      // 2. Titulli (modeli)
+      let title = '';
+      const titleElem = cardElement.querySelector('h3');
+      if (titleElem) title = titleElem.innerText.trim();
+      else {
+        const altTitle = cardElement.querySelector('.text-2xl, .text-3xl, .font-bold');
+        if (altTitle) title = altTitle.innerText.trim();
+      }
+      if (!title) title = 'Makina e re';
+      
+      const allText = cardElement.innerText;
+      
+      // 3. Viti
+      let year = 2018;
+      const yearMatch = allText.match(/Viti[\s\S]*?(\d{4})/i);
+      if (yearMatch) year = parseInt(yearMatch[1]);
+      else {
+        const simpleYear = allText.match(/(20\d{2})/);
+        if (simpleYear) year = parseInt(simpleYear[1]);
+      }
+      
+      // 4. Kilometrat
+      let km = 0;
+      const kmMatch = allText.match(/Kilometra[\s\S]*?([\d\.\,]+\s*km)/i);
+      if (kmMatch) {
+        let kmRaw = kmMatch[1].replace(/\./g, '').replace(',', '').replace('km', '').trim();
+        km = parseInt(kmRaw) || 0;
+      } else {
+        const numbMatch = allText.match(/(\d{1,3}(?:[\.\s]\d{3})*\d*)\s*km/i);
+        if (numbMatch) km = parseInt(numbMatch[1].replace(/\./g, '')) || 0;
+      }
+      
+      // 5. Karburanti
+      let fuel = 'Benzinë';
+      if (allText.match(/Karburanti[\s\S]*?(Diesel|Gasoline|Benzinë|Electric|Hybrid)/i)) {
+        const fuelMatch = allText.match(/Karburanti[\s\S]*?(Diesel|Gasoline|Benzinë|Electric|Hybrid)/i);
+        if (fuelMatch) {
+          let f = fuelMatch[1].toLowerCase();
+          if (f === 'gasoline') fuel = 'Benzinë';
+          else if (f === 'diesel') fuel = 'Diesel';
+          else if (f === 'electric') fuel = 'Electric';
+          else fuel = fuelMatch[1];
+        }
+      }
+      
+      // 6. Çmimi (€)
+      let price = 0;
+      const pricePattern = /(\d{1,3}(?:[\.\,]\d{3})*\d*)\s*€/;
+      const priceMatch = allText.match(pricePattern);
+      if (priceMatch) {
+        let priceStr = priceMatch[1].replace(/\./g, '').replace(',', '');
+        price = parseInt(priceStr) || 0;
+      }
+      
+      // 7. Brandi nga titulli
+      let brand = 'audi';
+      const brandLower = title.toLowerCase();
+      if (brandLower.includes('hyundai')) brand = 'hyundai';
+      else if (brandLower.includes('kia')) brand = 'kia';
+      else if (brandLower.includes('genesis')) brand = 'genesis';
+      else if (brandLower.includes('audi')) brand = 'audi';
+      else if (brandLower.includes('bmw')) brand = 'bmw';
+      else if (brandLower.includes('mercedes') || brandLower.includes('benz')) brand = 'mercedes';
+      
+      // 8. Modeli (pa brand)
+      let model = title.replace(new RegExp(brand, 'i'), '').trim();
+      if (!model) model = title;
+      
+      // 9. Gjenero ID
+      const cleanId = (title.replace(/\s/g, '').substring(0, 8) + Math.floor(Math.random() * 10000)).toUpperCase();
+      const carId = `CAR_${cleanId}`;
+      
+      // 10. Origjina
+      const koreanBrands = ['hyundai', 'kia', 'genesis'];
+      const origin = koreanBrands.includes(brand) ? 'Korea' : 'Gjermani';
+      
+      return {
+        id: carId,
+        brand: brand,
+        model: model,
+        year: year,
+        km: km,
+        price: price,
+        fuel: fuel,
+        img: imgSrc,
+        origin: origin
+      };
+    }
+    
+    // Render preview vizual
+    function renderPreview(car) {
+      const previewDiv = document.getElementById('previewCard');
+      if (!car) {
+        previewDiv.innerHTML = `<div class="text-center text-gray-500"><i class="fas fa-car-side text-3xl mb-2 opacity-40"></i><br>Konvertoni për të parë preview</div>`;
+        return;
+      }
+      const isKorean = car.origin === 'Korea';
+      const priceFormatted = car.price.toLocaleString('de-DE') + ' €';
+      const kmFormatted = car.km.toLocaleString() + ' km';
+      previewDiv.innerHTML = `
+        <div class="max-w-sm w-full mx-auto bg-[#111317] rounded-xl overflow-hidden border ${isKorean ? 'border-l-4 border-l-amber-500' : 'border-gray-700'} shadow-md">
+          <div class="relative h-36 overflow-hidden bg-black">
+            <img src="${car.img}" class="w-full h-full object-cover" alt="${car.model}" onerror="this.src='https://placehold.co/600x400/1e1f2a/amber?text=AAB'">
+            ${isKorean ? '<span class="absolute top-2 left-2 bg-amber-600 text-black text-[9px] font-bold px-2 py-0.5 rounded-full"><i class="fas fa-flag"></i> KORE</span>' : ''}
+          </div>
+          <div class="p-3">
+            <div class="flex justify-between items-start"><div><h4 class="font-bold text-sm">${car.brand.toUpperCase()} ${car.model}</h4><div class="flex gap-2 text-xs text-gray-400"><span><i class="far fa-calendar"></i> ${car.year}</span><span><i class="fas fa-tachometer-alt"></i> ${kmFormatted}</span></div></div><div class="bg-black/50 px-2 py-0.5 rounded"><span class="text-amber-400 text-sm font-bold">${priceFormatted}</span></div></div>
+            <div class="flex gap-2 mt-2"><span class="bg-gray-800 text-[10px] px-2 py-0.5 rounded-full"><i class="fas fa-gas-pump"></i> ${car.fuel}</span><span class="bg-gray-800 text-[10px] px-2 py-0.5 rounded-full"><i class="fas fa-globe"></i> ${car.origin}</span></div>
+            <div class="text-[9px] text-amber-500/70 mt-2"><i class="fas fa-id-card"></i> ${car.id}</div>
+          </div>
+        </div>
+      `;
+    }
+    
+    // Konvertimi dhe shfaqja
+    function convertAndDisplay() {
+      const rawHtml = document.getElementById('htmlInput').value;
+      if (!rawHtml.trim()) {
+        document.getElementById('outputJson').innerHTML = '// ⚠️ Gabim: Ju lutem ngjisni HTML-në e makinës.';
+        renderPreview(null);
+        return;
+      }
+      try {
+        const carData = parseCarFromHTML(rawHtml);
+        // Gjenero tekstin e objektit JS
+        const jsOutput = `{
+  id: "${carData.id}",
+  brand: "${carData.brand}",
+  model: "${carData.model.replace(/"/g, '\\"')}",
+  year: ${carData.year},
+  km: ${carData.km},
+  price: ${carData.price},
+  fuel: "${carData.fuel}",
+  img: "${carData.img}",
+  origin: "${carData.origin}"
+}`;
+        document.getElementById('outputJson').innerHTML = `<span class="text-green-400">// ✅ Objekt i vlefshëm për carsDataset</span>\n${jsOutput}`;
+        renderPreview(carData);
+        window.lastCarObject = jsOutput;
+      } catch (err) {
+        document.getElementById('outputJson').innerHTML = `// ❌ Gabim: ${err.message}\n// Kontrollo që HTML ka titull, vit, kilometra dhe çmim.`;
+        renderPreview(null);
+      }
+    }
+    
+    // Kopjo në clipboard
+    async function copyOutput() {
+      const outputPre = document.getElementById('outputJson');
+      let text = outputPre.innerText;
+      if (!text || text.includes('Gabim') || text.includes('Kliko')) {
+        alert('Së pari konverto një makinë për të kopjuar objektin.');
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(text);
+        const btn = document.getElementById('copyBtn');
+        const original = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Kopjuar!';
+        setTimeout(() => { btn.innerHTML = original; }, 1500);
+      } catch(e) { alert('Kopjo manualisht'); }
+    }
+    
+    // Shembull automatik
+    function loadExample() {
+      const example = `<a href="car.php?id=41620985" target="_blank" class="flex flex-col md:flex-row group bg-white border border-gray-200 shadow-2xs rounded-xl overflow-hidden">
+  <div class="relative md:w-2/5 aspect-video">
+    <img src="https://ci.encar.com/carpicture/carpicture02/pic4162/41620985_001.jpg?sizeToGo=800x600" alt="Audi A3">
+  </div>
+  <div class="p-3 md:p-4 md:w-3/5">
+    <h3 class="text-2xl font-bold text-gray-800 mb-4">Audi A3 40 TFSI</h3>
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <div><div class="text-sm text-gray-600">Viti</div><div class="font-semibold">2018</div></div>
+      <div><div class="text-sm text-gray-600">Kilometra</div><div class="font-semibold">168.468 km</div></div>
+      <div><div class="text-sm text-gray-600">Karburanti</div><div class="font-semibold">Gasoline</div></div>
+    </div>
+    <div class="flex justify-between items-center"><div class="text-right"><p class="text-xl font-bold text-gray-700"><span class="font-semibold">7,275 €</span></p></div></div>
+  </div>
+</a>`;
+      document.getElementById('htmlInput').value = example;
+      convertAndDisplay();
+    }
+    
+    // Pastro te gjitha
+    function clearAll() {
+      document.getElementById('htmlInput').value = '';
+      document.getElementById('outputJson').innerHTML = '// Kliko "Konverto" pasi të ngjis HTML-në\n// Do të shfaqet objekti i makinës në formatin e duhur';
+      renderPreview(null);
+    }
+    
+    // Event listeners
+    document.getElementById('convertBtn').addEventListener('click', convertAndDisplay);
+    document.getElementById('copyBtn').addEventListener('click', copyOutput);
+    document.getElementById('exampleBtn').addEventListener('click', loadExample);
+    document.getElementById('clearBtn').addEventListener('click', clearAll);
+  </script>
+</body>
+</html>
