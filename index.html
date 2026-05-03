@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Auto Salloni AAB</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    body { background: #0A0C10; scroll-behavior: smooth; }
+    .font-luxury { font-family: 'Playfair Display', serif; }
+    
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #14161c; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+    
+    /* Hero Background */
+    .hero-bg {
+      background-image: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1920');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.7) 50%, rgba(0,0,0,0.85) 100%);
+    }
+    
+    /* Nav Animation */
+    .nav-link {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    .nav-link:hover {
+      color: #3b82f6;
+    }
+    
+    /* Logo Hover */
+    .logo-link {
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .logo-link:hover {
+      transform: scale(1.05);
+    }
+    
+    /* Car Card */
+    .car-card {
+      background: #111317;
+      border: 1px solid #1e293b;
+      transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
+      cursor: pointer;
+    }
+    .car-card:hover {
+      transform: translateY(-8px);
+      border-color: #3b82f6;
+      box-shadow: 0 30px 40px -20px rgba(59, 130, 246, 0.4);
+      background: #151a24;
+    }
+    
+    /* Premium Buttons */
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+    }
+    
+    /* WhatsApp Button */
+    .btn-whatsapp {
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      transition: all 0.3s ease;
+    }
+    .btn-whatsapp:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px -5px rgba(37, 211, 102, 0.4);
+    }
+    
+    /* Search Box Glass Effect */
+    .search-container {
+      background: rgba(15, 20, 30, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    .search-focus {
+      transition: all 0.2s;
+    }
+    .search-focus:focus {
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+      border-color: #3b82f6;
+      transform: translateY(-2px);
+    }
+    
+    .hero-glass {
+      background: rgba(8, 10, 15, 0.5);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+    
+    input, select {
+      background-color: #0F1119;
+      border: 1px solid #1e293b;
+      color: #F0F2F8;
+      border-radius: 12px;
+      padding: 12px 16px;
+      transition: all 0.2s;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      background-color: #161b24;
+    }
+    
+    .loading-spinner {
+      border: 3px solid rgba(59, 130, 246, 0.2);
+      border-top: 3px solid #3b82f6;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    .modal-overlay {
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(12px);
+    }
+    
+    .stat-badge { background: linear-gradient(135deg, #1e293b, #0f172a); border-left: 3px solid #3b82f6; }
+    
+    /* Image Navigation Arrows */
+    .nav-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      background: rgba(0,0,0,0.7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    .nav-arrow:hover {
+      background: #3b82f6;
+      transform: translateY(-50%) scale(1.1);
+    }
+    .nav-arrow.prev { left: 10px; }
+    .nav-arrow.next { right: 10px; }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .car-card { animation: fadeInUp 0.5s ease backwards; }
+    
+    @media (max-width: 640px) {
+      .hero-title { font-size: 2rem; }
+      .nav-arrow { width: 32px; height: 32px; }
+    }
+  </style>
+</head>
+<body class="text-gray-200 antialiased">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 border-b border-blue-500/20 bg-black/95 backdrop-blur-xl shadow-2xl">
+   <div class="container mx-auto px-6 py-4">
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center gap-3 logo-link" onclick="window.location.href='#home'">
+      <!-- Logo PNG instead of icon -->
+      <img src="logo.png" alt="Auto Salloni AAB" class="w-12 h-12 object-contain rounded-lg" onerror="this.src='https://placehold.co/300x300/1e293b/3b82f6?text=AAB'">
+      <div class="leading-tight">
+        <h1 class="text-2xl font-luxury font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Auto Salloni AAB</h1>
+        <p class="text-[10px] text-blue-400/80 -mt-1 tracking-wide">IMPORT PREMIUM I AUTOMJETEVE</p>
+      </div>
+    </div>
+    
+    <nav class="hidden md:flex gap-8 text-sm font-medium">
+      <a href="#home" class="nav-link transition">Ballina</a>
+      <a href="#inventory" class="nav-link transition">Inventari</a>
+      <a href="#about" class="nav-link transition">Rreth Nesh</a>
+      <a href="#contact" class="nav-link transition">Kontakt</a>
+    </nav>
+    
+    <div class="flex gap-3 text-sm">
+      <a href="https://wa.me/38348100175" target="_blank" class="hidden lg:flex items-center gap-2 bg-green-600/20 hover:bg-green-600/30 px-4 py-2 rounded-full border border-green-500/30 transition-all duration-300">
+        <i class="fab fa-whatsapp text-green-400 text-sm"></i>
+        <span class="text-xs">+383 48 100 175</span>
+      </a>
+    </div>
+  </div>
+</div>
+    
+    <div class="flex md:hidden justify-around bg-black/95 border-t border-gray-800 py-3 text-xs">
+      <a href="#home" class="flex flex-col items-center gap-1 transition hover:text-blue-400"><i class="fas fa-home text-blue-400"></i><span>Ballina</span></a>
+      <a href="#inventory" class="flex flex-col items-center gap-1 transition hover:text-blue-400"><i class="fas fa-car"></i><span>Veturat</span></a>
+      <a href="#about" class="flex flex-col items-center gap-1 transition hover:text-blue-400"><i class="fas fa-info-circle"></i><span>Rreth</span></a>
+      <a href="#contact" class="flex flex-col items-center gap-1 transition hover:text-blue-400"><i class="fas fa-headset"></i><span>Kontakt</span></a>
+    </div>
+  </header>
+
+  <!-- HERO SECTION with Background Image -->
+  <section id="home" class="hero-bg relative overflow-hidden py-20 md:py-28">
+    <div class="relative z-10 container mx-auto px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 bg-black/40 backdrop-blur-sm px-5 py-2 rounded-full border border-blue-500/20 mb-6 animate-pulse">
+          <i class="fas fa-database text-blue-400 text-xs"></i>
+          <span class="text-xs font-semibold tracking-wider uppercase" id="vehicleCount">Duke ngarkuar...</span>
+        </div>
+        <h1 class="hero-title text-5xl md:text-7xl font-luxury font-bold leading-tight">
+          <span class="bg-gradient-to-r from-white via-blue-200 to-purple-300 bg-clip-text text-transparent">Importues Lider i </span><br>
+          <span class="text-blue-400">Veturave Koreane</span>
+        </h1>
+        <p class="text-gray-200 text-lg md:text-xl mt-6 max-w-2xl mx-auto leading-relaxed">
+          Mbi 35,000+ automjete nga Korea, Gjermania dhe tregjet globale. Çmime reale, vetura te verifikuara.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4 mt-10">
+          <a href="#inventory" class="btn-primary text-white font-semibold px-8 py-3 rounded-xl transition flex items-center gap-2">
+            <i class="fas fa-car-side"></i> Shfleto Koleksionin
+          </a>
+          <a href="https://wa.me/38348100175" target="_blank" class="btn-whatsapp text-white font-semibold px-8 py-3 rounded-xl transition flex items-center gap-2">
+            <i class="fab fa-whatsapp text-xl"></i> Konsultë falas
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INVENTORY SECTION -->
+  <main id="inventory" class="container mx-auto px-6 py-16">
+    <!-- Premium Search Box -->
+    <div class="search-container rounded-2xl p-6 md:p-8 mb-10 shadow-2xl">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+          <i class="fas fa-search text-white"></i>
+        </div>
+        <h3 class="text-xl font-semibold font-luxury">Kërkimi i Avancuar</h3>
+      </div>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="relative">
+          <i class="fas fa-car absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+          <select id="brandFilter" class="w-full text-sm search-focus pl-10"><option value="">Të gjitha Markat</option></select>
+        </div>
+        <div class="relative">
+          <i class="fas fa-tag absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+          <select id="modelFilter" class="w-full text-sm search-focus pl-10"><option value="">Të gjitha Modelet</option></select>
+        </div>
+        <div class="relative">
+          <i class="fas fa-gas-pump absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+          <select id="fuelFilter" class="w-full text-sm search-focus pl-10">
+            <option value="">Të gjitha</option>
+            <option value="gasoline">⛽ Benzinë</option>
+            <option value="diesel">🛢️ Diesel</option>
+            <option value="electric">⚡ Elektrike</option>
+            <option value="hybrid">🔋 Hibrid</option>
+          </select>
+        </div>
+        <div class="relative">
+          <i class="fas fa-cogs absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+          <select id="transmissionFilter" class="w-full text-sm search-focus pl-10">
+            <option value="">Të gjitha</option>
+            <option value="auto">⚙️ Automatik</option>
+            <option value="manual">🔧 Manual</option>
+          </select>
+        </div>
+        <div class="flex gap-2">
+          <div class="relative flex-1">
+            <i class="fas fa-dollar-sign absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+            <input type="number" id="minPrice" placeholder="Min" class="w-full text-sm search-focus pl-8">
+          </div>
+          <div class="relative flex-1">
+            <i class="fas fa-dollar-sign absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+            <input type="number" id="maxPrice" placeholder="Max" class="w-full text-sm search-focus pl-8">
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <div class="relative flex-1"><i class="fas fa-calendar-alt absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i><input type="number" id="minYear" placeholder="Min" class="w-full text-sm search-focus pl-8"></div>
+          <div class="relative flex-1"><i class="fas fa-calendar-alt absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i><input type="number" id="maxYear" placeholder="Max" class="w-full text-sm search-focus pl-8"></div>
+        </div>
+        <div class="flex gap-2">
+          <div class="relative flex-1"><i class="fas fa-tachometer-alt absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i><input type="number" id="minMileage" placeholder="Min km" class="w-full text-sm search-focus pl-8"></div>
+          <div class="relative flex-1"><i class="fas fa-tachometer-alt absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i><input type="number" id="maxMileage" placeholder="Max km" class="w-full text-sm search-focus pl-8"></div>
+        </div>
+      </div>
+      <div class="flex gap-3 mt-6">
+        <button id="searchBtn" class="btn-primary text-white font-semibold px-6 py-2 rounded-xl text-sm"><i class="fas fa-search mr-2"></i> Kërko</button>
+        <button id="resetBtn" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-6 py-2 rounded-xl text-sm transition"><i class="fas fa-undo-alt mr-2"></i> Rivendos</button>
+      </div>
+    </div>
+
+    <div class="stat-badge flex justify-between items-center rounded-xl px-5 py-3 mb-6">
+      <div><i class="fas fa-chart-line text-blue-400 mr-2"></i><span id="resultStats" class="text-sm font-medium">Duke ngarkuar...</span></div>
+    
+    </div>
+
+    <div id="loadingIndicator" class="py-16 text-center">
+      <div class="loading-spinner"></div>
+      <p class="mt-4 text-blue-400">Duke ngarkuar të dhënat!...</p>
+    </div>
+
+    <div id="carsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 hidden"></div>
+    <div id="paginationWrapper" class="mt-10 flex justify-center hidden"></div>
+  </main>
+
+ <!-- ABOUT SECTION -->
+<section id="about" class="border-t border-gray-800 bg-gradient-to-b from-black to-gray-900 py-16">
+  <div class="container mx-auto px-4 md:px-6">
+    <div class="grid md:grid-cols-2 gap-8 md:gap-12">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-luxury font-bold mb-4">Rreth <span class="text-blue-400">Auto Salloni AAB</span></h2>
+        <div class="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mb-6"></div>
+        <p class="text-gray-300 leading-relaxed mb-6 text-sm md:text-base">E themeluar si një importuese premium e automjeteve luksoze, AAB specializohet në importe direkte nga Korea e Jugut dhe tregjet tjera globale.Ne sjellim ekselencë dhe besueshmëri për klientët tanë.</p>
+        <div class="grid grid-cols-2 gap-3 md:gap-4">
+          <div class="flex items-center gap-2"><i class="fas fa-check-circle text-blue-400"></i><span class="text-xs md:text-sm">100% Inspektim i Veturës</span></div>
+          <div class="flex items-center gap-2"><i class="fas fa-shield-alt text-blue-400"></i><span class="text-xs md:text-sm">Garancion</span></div>
+          <div class="flex items-center gap-2"><i class="fas fa-shipping-fast text-blue-400"></i><span class="text-xs md:text-sm">Transport</span></div>
+          <div class="flex items-center gap-2"><i class="fas fa-file-invoice-dollar text-blue-400"></i><span class="text-xs md:text-sm">Pagesa sipas marrëveshjes</span></div>
+        </div>
+      </div>
+      <div class="bg-black/40 p-5 md:p-6 rounded-2xl border border-blue-500/20 backdrop-blur-sm">
+        <h3 class="text-lg md:text-xl font-bold mb-4 flex items-center gap-2"><i class="fab fa-whatsapp text-green-400 text-xl md:text-2xl"></i> Porosit me WhatsApp</h3>
+        <p class="text-gray-300 text-xs md:text-sm mb-4">Kliko butonin "Blej tani" në çdo automjet për të na kontaktuar direkt në WhatsApp me detajet e makinës.</p>
+        <ol class="list-decimal list-inside space-y-2 md:space-y-3 text-gray-300 text-xs md:text-sm">
+          <li>Shfleto inventarin</li>
+          <li>Kliko "Blej tani" në makinën e dëshiruar</li>
+           <li>Ekipa e AAB e inspekton veturën e specifikuar</li>
+          <li>Konfirmo porosinë në WhatsApp</li>
+          <li>Transporti 21-30 ditë</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+    
+   <!-- FOOTER SECTION (fully updated) -->
+<footer id="contact" class="border-t border-gray-800 bg-black py-12">
+  <div class="container mx-auto px-4 md:px-6">
+    <div class="grid md:grid-cols-4 gap-8 mb-8">
+      
+      <!-- Column 1: Logo + Info -->
+      <div>
+        <div class="flex items-center gap-2 mb-4 cursor-pointer" onclick="window.location.href='#home'">
+          <!-- Logo.png in footer -->
+          <img src="logo.png" alt="AAB Premier" class="w-10 h-10 object-contain rounded-lg" onerror="this.src='https://placehold.co/40x40/1e293b/3b82f6?text=AAB'">
+          <span class="font-luxury text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Auto Sallon AAB</span>
+        </div>
+        <p class="text-gray-400 text-sm">Importues specializuar i automjeteve koreane.</p>
+      </div>
+      
+      <!-- Column 2: Contact Info + Email -->
+      <div>
+        <h3 class="font-semibold mb-3 text-blue-400">Kontakt</h3>
+        <p class="text-gray-400 text-sm mb-2"><i class="fab fa-whatsapp w-5 text-green-400"></i> +383 48 100 175</p>
+        <p class="text-gray-400 text-sm mb-2"><i class="fas fa-phone-alt w-5 text-blue-400"></i> +383 48 100 175</p>
+        <p class="text-gray-400 text-sm mb-2">
+          <i class="fas fa-envelope w-5 text-blue-400"></i> 
+          <a href="mailto:aabpremiumcars@gmail.com" class="hover:text-blue-400 transition">aabpremiumcars@gmail.com</a>
+        </p>
+      </div>
+      
+      <!-- Column 3: Social Media Links -->
+      <div>
+        <h3 class="font-semibold mb-3 text-blue-400">Na Ndiqni</h3>
+        <div class="flex gap-4">
+          <a href="https://www.instagram.com/autosalloniaab/" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gradient-to-r hover:from-pink-500 hover:to-orange-500 transition-all duration-300">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="https://www.facebook.com/people/Autosalloni-AAB/61578295328971/" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 transition-all duration-300">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://www.tiktok.com/@autosalloniaab" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gradient-to-r hover:from-black hover:to-gray-700 transition-all duration-300">
+            <i class="fab fa-tiktok"></i>
+          </a>
+          <a href="https://wa.me/38348100175" target="_blank" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-green-600 transition-all duration-300">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Column 4: Google Maps Embed -->
+      <div>
+        <h3 class="font-semibold mb-3 text-blue-400">Lokacioni</h3>
+        <div class="rounded-xl overflow-hidden border border-gray-700">
+         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2953.5472037384807!2d20.722051900000004!3d42.245485599999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x13539569d6355e9f%3A0x7a89660cfa24512a!2sAuto%20Salloni%20AAB!5e0!3m2!1sen!2s!4v1777822805248!5m2!1sen!2s" width="100%" height="150" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <p class="text-gray-400 text-xs mt-2">Prishtinë & Durrës, Kosovë</p>
+      </div>
+    </div>
+    
+    <!-- Footer Bottom with Dynamix Credit + Golden D Icon -->
+    <div class="text-center text-gray-500 text-xs pt-8 border-t border-gray-800">
+      <p class="mb-2">© 2026 Auto Salloni AAB — Të gjitha të drejtat e rezervuara</p>
+      <p class="flex items-center justify-center gap-2">
+        <span>Developed by</span>
+        <a href="https://dynamix-dev.netlify.app" target="_blank" class="flex items-center gap-1 hover:opacity-80 transition-opacity duration-300 group">
+          <!-- Golden D Icon (using reliable image + fallback) -->
+          <img src="https://img.magnific.com/premium-vector/golden-letter-d-symbol-black-background-icon-6_95164-5562.jpg" 
+               alt="D" 
+               class="w-5 h-5 rounded-full object-cover group-hover:scale-110 transition-transform"
+               onerror="this.onerror=null; this.src='https://placehold.co/20x20/f59e0b/ffffff?text=D'; this.classList.add='rounded-full'">
+          <span class="font-semibold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Dynamix</span>
+        </a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  /* Add any additional CSS if needed */
+  .footer-map iframe {
+    filter: grayscale(100%) invert(90%);
+  }
+  .footer-map iframe:hover {
+    filter: grayscale(0%) invert(0%);
+  }
+</style>
+
+  <!-- MODAL -->
+  <div id="vehicleModal" class="fixed inset-0 z-50 hidden items-center justify-center modal-overlay" onclick="closeModal()">
+    <div class="bg-gradient-to-br from-gray-900 to-black rounded-2xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+      <div class="sticky top-0 bg-gray-900/95 backdrop-blur-sm p-5 border-b border-gray-700 flex justify-between items-center">
+        <h3 class="text-xl font-luxury font-bold flex items-center gap-2"><i class="fas fa-info-circle text-blue-400"></i> Detajet e Automjetit</h3>
+        <button onclick="closeModal()" class="text-gray-400 hover:text-white text-2xl transition">&times;</button>
+      </div>
+      <div id="modalContent" class="p-6"></div>
+    </div>
+  </div>
+
+  <script>
+    let currentImageIndex = 0;
+    let currentImageList = [];
+    
+    function updateModalImage(index) {
+      const modalImg = document.getElementById('modalMainImage');
+      if (modalImg && currentImageList.length > 0) {
+        currentImageIndex = (index + currentImageList.length) % currentImageList.length;
+        modalImg.src = currentImageList[currentImageIndex];
+      }
+    }
+    
+    const brandLogos = {
+      'Hyundai': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Hyundai_Motor_Company_logo.svg/2560px-Hyundai_Motor_Company_logo.svg.png',
+      'Kia': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Kia_Motors_logo.svg/2560px-Kia_Motors_logo.svg.png',
+      'Genesis': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Genesis_Motors_logo.svg/2560px-Genesis_Motors_logo.svg.png',
+      'BMW': 'https://www.carlogos.org/car-logos/bmw-logo.png',
+      'Mercedes-Benz': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Logo.svg/2560px-Mercedes-Logo.svg.png',
+      'Audi': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Audi-Logo_2016.svg/2560px-Audi-Logo_2016.svg.png'
+    };
+    
+    let allCars = [], filteredCars = [], currentPage = 1, totalCount = 0;
+    const itemsPerPage = 6;
+    let uniqueBrands = new Set(), modelsByBrand = new Map();
+    
+    async function loadCars() {
+      document.getElementById('loadingIndicator').classList.remove('hidden');
+      try {
+        const response = await fetch('cars.json');
+        if (!response.ok) throw new Error('cars.json not found');
+        const data = await response.json();
+        allCars = data.results || data.data || [];
+        totalCount = allCars.length;
+        
+        allCars.forEach(car => {
+          const brandName = car.brand?.name;
+          const modelName = car.model?.name;
+          if (brandName && modelName) {
+            uniqueBrands.add(brandName);
+            if (!modelsByBrand.has(brandName)) modelsByBrand.set(brandName, new Set());
+            modelsByBrand.get(brandName).add(modelName);
+          }
+        });
+        
+        const brandSelect = document.getElementById('brandFilter');
+        Array.from(uniqueBrands).sort().forEach(brand => {
+          const option = document.createElement('option');
+          option.value = brand;
+          option.textContent = brand;
+          brandSelect.appendChild(option);
+        });
+        
+        document.getElementById('vehicleCount').innerHTML = totalCount.toLocaleString() + ' Automjete';
+        document.getElementById('loadingIndicator').classList.add('hidden');
+        document.getElementById('carsGrid').classList.remove('hidden');
+        document.getElementById('paginationWrapper').classList.remove('hidden');
+        
+        filteredCars = [...allCars];
+        renderCars();
+      } catch (error) {
+        document.getElementById('loadingIndicator').innerHTML = `<div class="text-center py-16 bg-red-500/10 rounded-2xl"><i class="fas fa-exclamation-triangle text-5xl text-red-400 mb-4"></i><p class="text-red-400">cars.json nuk u gjet</p></div>`;
+      }
+    }
+    
+    function updateModelsDropdown() {
+      const selectedBrand = document.getElementById('brandFilter').value;
+      const modelSelect = document.getElementById('modelFilter');
+      modelSelect.innerHTML = '<option value="">Të gjitha Modelet</option>';
+      if (selectedBrand && modelsByBrand.has(selectedBrand)) {
+        Array.from(modelsByBrand.get(selectedBrand)).sort().forEach(model => {
+          const option = document.createElement('option');
+          option.value = model;
+          option.textContent = model;
+          modelSelect.appendChild(option);
+        });
+      }
+    }
+    
+    function filterCars() {
+      const brand = document.getElementById('brandFilter').value;
+      const model = document.getElementById('modelFilter').value;
+      const fuel = document.getElementById('fuelFilter').value;
+      const transmission = document.getElementById('transmissionFilter').value;
+      const minPrice = parseInt(document.getElementById('minPrice').value);
+      const maxPrice = parseInt(document.getElementById('maxPrice').value);
+      const minYear = parseInt(document.getElementById('minYear').value);
+      const maxYear = parseInt(document.getElementById('maxYear').value);
+      const minMileage = parseInt(document.getElementById('minMileage').value);
+      const maxMileage = parseInt(document.getElementById('maxMileage').value);
+      
+      filteredCars = allCars.filter(car => {
+        const carBrand = car.brand?.name, carModel = car.model?.name;
+        const carPrice = car.price_usd || 0, carYear = car.year || 0, carMileage = car.mileage || 0;
+        const carFuel = car.fuel_type || '', carTrans = car.transmission || '';
+        
+        if (brand && carBrand !== brand) return false;
+        if (model && carModel !== model) return false;
+        if (fuel && carFuel !== fuel) return false;
+        if (transmission && carTrans !== transmission) return false;
+        if (!isNaN(minPrice) && carPrice < minPrice) return false;
+        if (!isNaN(maxPrice) && carPrice > maxPrice) return false;
+        if (!isNaN(minYear) && carYear < minYear) return false;
+        if (!isNaN(maxYear) && carYear > maxYear) return false;
+        if (!isNaN(minMileage) && carMileage < minMileage) return false;
+        if (!isNaN(maxMileage) && carMileage > maxMileage) return false;
+        return true;
+      });
+      currentPage = 1;
+      renderCars();
+    }
+    
+   function sendWhatsApp(brandName, modelName, year, price, mileage, photoUrl) {
+
+  const message = `🚗 *AAB Premier - Kërkesë për Automjet* 🚗
+
+📌 *Makina:* ${brandName} ${modelName}
+📅 *Viti:* ${year || 'N/A'}
+💰 *Çmimi:* €${Math.round((price || 0) * 0.92).toLocaleString()}
+📏 *Kilometrazhi:* ${(mileage || 0).toLocaleString()} km
+🖼️ *Foto:* ${photoUrl || 'N/A'}
+🔗 *Link:* ${window.location.href}
+
+👤 *Klienti:* ${window.location.hostname}
+📱 *Platforma:* Web
+
+_Përshëndetje, jam i interesuar për këtë veturë. A mund të më jepni më shumë detaje?_`;
+
+  const encodedMessage = encodeURIComponent(message);
+
+  const phoneNumber = "38348100175"; // ← put your number (no +)
+
+  const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+  window.open(url, "_blank");
+}
+    
+    function renderCars() {
+      const totalPages = Math.ceil(filteredCars.length / itemsPerPage);
+      const start = (currentPage - 1) * itemsPerPage;
+      const pageCars = filteredCars.slice(start, start + itemsPerPage);
+      
+      document.getElementById('resultStats').innerHTML = `${filteredCars.length} automjete • Faqe ${currentPage} nga ${totalPages || 1}`;
+      if (pageCars.length === 0) { document.getElementById('carsGrid').innerHTML = `<div class="col-span-full text-center py-16"><i class="fas fa-car-side text-5xl text-gray-600 mb-4"></i><p class="text-gray-400">Nuk u gjet asnjë automjet</p></div>`; document.getElementById('paginationWrapper').innerHTML = ''; return; }
+      
+      const grid = document.getElementById('carsGrid');
+      grid.innerHTML = pageCars.map((car, index) => {
+        const brandName = car.brand?.name || 'Unknown', modelName = car.model?.name || '';
+        const priceUSD = car.price_usd || 0, priceEUR = Math.round(priceUSD * 0.92);
+        const isKorean = ['Hyundai', 'Kia', 'Genesis'].includes(brandName);
+        let photo = car.main_photo_url || (car.preview_photos?.[0]?.url) || `https://placehold.co/800x500/1a1a2e/3b82f6?text=${brandName}+${modelName}`;
+        
+        return `<div class="car-card rounded-2xl overflow-hidden group" style="animation-delay: ${index * 0.1}s">
+          <div class="relative h-56 overflow-hidden bg-gray-800 cursor-pointer" onclick='showDetails(${JSON.stringify(car).replace(/'/g, "\\'")})'>
+            <img src="${photo}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/800x500/1a1a2e/3b82f6?text=${brandName}'">
+            ${isKorean ? '<div class="absolute top-3 left-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full"><i class="fas fa-gem"></i> IMPORT KORE</div>' : ''}
+          </div>
+          <div class="p-5">
+            <div class="flex justify-between items-start">
+              <div><h3 class="text-xl font-bold">${brandName} ${modelName}</h3><div class="flex gap-2 text-gray-400 text-xs mt-1"><span><i class="far fa-calendar-alt text-blue-400"></i> ${car.year || 'N/A'}</span><span><i class="fas fa-tachometer-alt text-blue-400"></i> ${(car.mileage || 0).toLocaleString()} km</span></div></div>
+              <p class="text-2xl font-bold text-blue-400">€${priceEUR.toLocaleString()}</p>
+            </div>
+            <div class="flex gap-2 mt-4"><span class="bg-gray-800/60 px-3 py-1 rounded-full text-xs"><i class="fas fa-gas-pump text-blue-400"></i> ${car.fuel_type === 'gasoline' ? 'Benzinë' : (car.fuel_type === 'diesel' ? 'Diesel' : 'N/A')}</span><span class="bg-gray-800/60 px-3 py-1 rounded-full text-xs"><i class="fas fa-cogs text-blue-400"></i> ${car.transmission === 'auto' ? 'Automatik' : 'N/A'}</span></div>
+            <div class="flex gap-2 mt-4"><button onclick='showDetails(${JSON.stringify(car).replace(/'/g, "\\'")})' class="flex-1 bg-gray-700 hover:bg-gray-600 py-2 rounded-xl text-sm transition"><i class="fas fa-eye mr-1"></i> Detajet</button><button onclick='sendWhatsApp("${brandName}", "${modelName}", ${car.year || 0}, ${priceUSD}, ${car.mileage || 0}, "${photo}")' class="flex-1 btn-whatsapp text-white font-semibold py-2 rounded-xl text-sm transition"><i class="fab fa-whatsapp mr-1"></i> Blej tani</button></div>
+          </div>
+        </div>`;
+      }).join('');
+      renderPagination(totalPages);
+    }
+    
+    window.showDetails = function(car) {
+      const brandName = car.brand?.name || 'Unknown', modelName = car.model?.name || '';
+      const priceUSD = car.price_usd || 0, priceEUR = Math.round(priceUSD * 0.92);
+      
+      let allImages = [];
+      if (car.preview_photos && car.preview_photos.length > 0) {
+        allImages = car.preview_photos.map(p => p.url);
+      } else if (car.main_photo_url) {
+        allImages = [car.main_photo_url];
+      }
+      if (allImages.length === 0) allImages = [`https://placehold.co/800x500/1a1a2e/3b82f6?text=${brandName}+${modelName}`];
+      
+      currentImageList = allImages;
+      currentImageIndex = 0;
+      
+      const modal = document.getElementById('vehicleModal');
+      const content = document.getElementById('modalContent');
+      content.innerHTML = `
+        <div class="space-y-5">
+          <div class="relative">
+            <img src="${allImages[0]}" class="w-full rounded-xl h-96 object-cover" id="modalMainImage" onerror="this.src='https://placehold.co/800x500/1a1a2e/3b82f6?text=No+Image'">
+            ${allImages.length > 1 ? `<div class="nav-arrow prev" onclick="event.stopPropagation(); updateModalImage(currentImageIndex - 1)"><i class="fas fa-chevron-left"></i></div><div class="nav-arrow next" onclick="event.stopPropagation(); updateModalImage(currentImageIndex + 1)"><i class="fas fa-chevron-right"></i></div>` : ''}
+          </div>
+          <div class="flex justify-between items-start"><div><h2 class="text-2xl font-bold">${brandName} ${modelName}</h2><p class="text-gray-400 text-sm">${car.display_name || `${brandName} ${modelName} (${car.year})`}</p></div><div class="text-right"><p class="text-3xl font-bold text-blue-400">€${priceEUR.toLocaleString()}</p><p class="text-gray-500 text-xs">+ 350€ deri ne Prishtine </p></div></div>
+          <div class="grid grid-cols-2 gap-3"><div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs"><i class="far fa-calendar-alt mr-1"></i> Viti</p><p class="text-lg font-semibold">${car.year || 'N/A'}</p></div><div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs"><i class="fas fa-tachometer-alt mr-1"></i> Kilometrazhi</p><p class="text-lg">${(car.mileage || 0).toLocaleString()} km</p></div><div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs"><i class="fas fa-microchip mr-1"></i> Motori</p><p class="text-sm">${car.engine_cc ? `${car.engine_cc} cc` : 'N/A'}</p></div><div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs"><i class="fas fa-cogs mr-1"></i> Transmisioni</p><p class="text-sm">${car.transmission === 'auto' ? 'Automatik' : 'N/A'}</p></div><div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs"><i class="fas fa-gas-pump mr-1"></i> Karburanti</p><p class="text-sm">${car.fuel_type === 'gasoline' ? 'Benzinë' : (car.fuel_type === 'diesel' ? 'Diesel' : 'N/A')}</p></div><div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs"><i class="fas fa-car mr-1"></i> Lloji</p><p class="text-sm">${car.body_type || 'N/A'}</p></div>${car.color ? `<div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs"><i class="fas fa-palette mr-1"></i> Ngjyra</p><p class="text-sm">${car.color}</p></div>` : ''}${car.region ? `<div class="bg-black/40 p-3 rounded-xl"><p class="text-gray-400 text-xs"><i class="fas fa-map-marker-alt mr-1"></i> Rajoni</p><p class="text-sm">${car.region}</p></div>` : ''}</div>
+          <div class="flex gap-3"><button onclick="sendWhatsApp('${brandName}', '${modelName}', ${car.year || 0}, ${priceUSD}, ${car.mileage || 0}, '${allImages[0]}'); closeModal();" class="flex-1 btn-whatsapp text-white font-semibold py-3 rounded-xl"><i class="fab fa-whatsapp mr-2"></i> Blej tani</button></div>
+        </div>`;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    };
+    
+    window.updateModalImage = updateModalImage;
+    window.sendWhatsApp = sendWhatsApp;
+    window.closeModal = () => { document.getElementById('vehicleModal').classList.add('hidden'); document.body.style.overflow = ''; };
+    
+    function renderPagination(totalPages) {
+      if (totalPages <= 1) { document.getElementById('paginationWrapper').innerHTML = ''; return; }
+      let html = '<div class="flex gap-2 flex-wrap justify-center">';
+      if (currentPage > 1) html += `<button onclick="goToPage(${currentPage - 1})" class="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-sm"><i class="fas fa-chevron-left"></i> Mbrapa</button>`;
+      for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) html += `<button onclick="goToPage(${i})" class="w-10 h-10 rounded-lg ${currentPage === i ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white' : 'bg-gray-800 hover:bg-gray-700'}">${i}</button>`;
+      if (currentPage < totalPages) html += `<button onclick="goToPage(${currentPage + 1})" class="px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-sm">Para <i class="fas fa-chevron-right"></i></button>`;
+      html += '</div>';
+      document.getElementById('paginationWrapper').innerHTML = html;
+    }
+    
+    function goToPage(page) { currentPage = page; renderCars(); window.scrollTo({ top: 400, behavior: 'smooth' }); }
+    
+    document.getElementById('brandFilter').addEventListener('change', () => { updateModelsDropdown(); filterCars(); });
+    document.getElementById('searchBtn').addEventListener('click', filterCars);
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      document.getElementById('brandFilter').value = '';
+      document.getElementById('modelFilter').innerHTML = '<option value="">Të gjitha Modelet</option>';
+      document.getElementById('fuelFilter').value = '';
+      document.getElementById('transmissionFilter').value = '';
+      document.getElementById('minPrice').value = '';
+      document.getElementById('maxPrice').value = '';
+      document.getElementById('minYear').value = '';
+      document.getElementById('maxYear').value = '';
+      document.getElementById('minMileage').value = '';
+      document.getElementById('maxMileage').value = '';
+      filterCars();
+    });
+    
+    loadCars();
+  </script>
+</body>
+</html>
